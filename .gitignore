@@ -55,4 +55,5 @@ Thumbs.db
 *.pyc
 
 #custom settings
-Assets/_GitIgnore
+*/Assets/_GitIgnore*
+*/UserSettings*
