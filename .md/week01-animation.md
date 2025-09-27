@@ -4,9 +4,10 @@
 
 ## 🎯 今週の目的
 
-- A
-- B
-- C
+- Animation Animatorのおさらい
+- Animation Eventを理解する 
+- Animator Blend Tree を理解する
+- IK, FKを理解する
 
 ---
 
