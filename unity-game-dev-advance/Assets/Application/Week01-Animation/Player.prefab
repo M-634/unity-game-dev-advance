@@ -1784,8 +1784,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57d39a9692250a140a5c32f9bc4b3bed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
+  _animator: {fileID: 5079057375787577932}
   _idleSword: {fileID: 2186989893120883439}
   _attackingSword: {fileID: 6739111330420943618}
+  _waitTimeForChangingAttackToIdleState: 2.64
 --- !u!1 &6557650402737867157
 GameObject:
   m_ObjectHideFlags: 0
