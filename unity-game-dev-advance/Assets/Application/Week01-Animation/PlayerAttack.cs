@@ -1,5 +1,4 @@
 using System;
-using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -23,11 +22,18 @@ namespace Week01
         [SerializeField, Range(0f, 5f)]
         private float _waitTimeForChangingAttackToIdleState;
 
+        [SerializeField]
+        private GameObject _hitCheckerObject;
+        
+        [SerializeField, Range(0f, 5f)]
+        private float _showCollisionObjectTime = 0.01f;
+
         private bool _isAttacking = false;
 
         private void Start()
         {
             SetActiveChangeSword(false);
+            _hitCheckerObject.SetActive(false);
         }
 
         private void SetActiveChangeSword(bool isAttacking)
@@ -58,6 +64,31 @@ namespace Week01
             await UniTask.Delay(TimeSpan.FromSeconds(_waitTimeForChangingAttackToIdleState), cancellationToken: gameObject.GetCancellationTokenOnDestroy());
             
             SetActiveChangeSword(false);
+        }
+
+        /// <summary>
+        /// Invoke Animation Event 
+        /// </summary>
+        public void ShowAttackCollisionObject()
+        {
+            if (!_isAttacking)
+            {
+                throw new InvalidOperationException("not attacking state");
+            }
+            
+            if (_hitCheckerObject != null)
+            {
+                ShowCollisionAsync().Forget();
+            }
+        }
+
+        private async UniTask ShowCollisionAsync()
+        {
+            _hitCheckerObject.SetActive(true);
+            
+            await UniTask.Delay(TimeSpan.FromSeconds(_showCollisionObjectTime), cancellationToken: gameObject.GetCancellationTokenOnDestroy());
+            
+            _hitCheckerObject.SetActive(false);
         }
     }
 }
