@@ -1,7 +1,7 @@
 using System;
 using Cysharp.Threading.Tasks;
+using Unity_Game_Dev_Advanced;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Week01
 {
@@ -9,6 +9,9 @@ namespace Week01
     public class PlayerAttack : MonoBehaviour
     {
         private static readonly int AttackAnimatorHash = Animator.StringToHash("Attack");
+
+        [SerializeField]
+        private StarterAssetsInputsRapper _input;
 
         [SerializeField]
         private Animator _animator;
@@ -32,6 +35,11 @@ namespace Week01
 
         private void Start()
         {
+            if (_input == null)
+            {
+                _input = GetComponent<StarterAssetsInputsRapper>();
+            }
+            
             SetActiveChangeSword(false);
             _hitCheckerObject.SetActive(false);
         }
@@ -43,15 +51,13 @@ namespace Week01
             _isAttacking = isAttacking;
         }
 
-#if ENABLE_INPUT_SYSTEM
-        public void OnAttack(InputValue value)
+        private void Update()
         {
-            if (value.isPressed)
+            if (_input.attack)
             {
                 Attack().Forget();
             }
         }
-#endif
 
         private async UniTask Attack()
         {
@@ -64,6 +70,7 @@ namespace Week01
             await UniTask.Delay(TimeSpan.FromSeconds(_waitTimeForChangingAttackToIdleState), cancellationToken: gameObject.GetCancellationTokenOnDestroy());
             
             SetActiveChangeSword(false);
+            _input.attack = false;
         }
 
         /// <summary>
