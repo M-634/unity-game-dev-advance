@@ -1,7 +1,8 @@
 {
   "dependencies": {
+    "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
     "com.unity.ai.navigation": "2.0.9",
-    "com.unity.burst": "1.8.24",
+    "com.unity.burst": "1.8.25",
     "com.unity.cinemachine": "2.10.4",
     "com.unity.collab-proxy": "2.9.3",
     "com.unity.collections": "2.5.7",
@@ -19,8 +20,8 @@
     "com.unity.rendering.light-transport": "1.0.1",
     "com.unity.searcher": "4.9.2",
     "com.unity.shadergraph": "17.2.0",
-    "com.unity.test-framework": "1.5.1",
-    "com.unity.test-framework.performance": "3.1.0",
+    "com.unity.test-framework": "1.6.0",
+    "com.unity.test-framework.performance": "3.2.0",
     "com.unity.timeline": "1.8.9",
     "com.unity.ugui": "2.0.0",
     "com.unity.visualscripting": "1.9.7",
@@ -57,7 +58,6 @@
     "com.unity.modules.video": "1.0.0",
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
-    "com.unity.modules.xr": "1.0.0",
-    "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask"
+    "com.unity.modules.xr": "1.0.0"
   }
 }
