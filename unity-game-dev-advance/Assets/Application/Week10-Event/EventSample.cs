@@ -3,57 +3,76 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-[Serializable]
-public class SampleSerialize : UnityEvent{}
-
-public class EventSample : MonoBehaviour
+namespace Week10
 {
-    public event Action sampleAction;
-    public event Func<int, int, int> sampleFunc;
-    
-    [SerializeField] Button  sampleButton;
-    [SerializeField] SampleSerialize sampleSerialize;
+    [Serializable]
+    public class SampleUnityEvent : UnityEvent { }
 
-    void Start()
+    public class EventSample : MonoBehaviour
     {
-        sampleButton.onClick.AddListener(Hoge);
-        sampleButton.onClick.AddListener(Hog2);
-        
-        sampleSerialize.Invoke();
-        
-        sampleAction += Hoge;
-        sampleAction += Hog2;
-        sampleFunc += Add;
+        public event Action SampleAction;
 
-        // if (sampleAction != null)
-        // {
-        //     sampleAction.Invoke();
-        // }
-        sampleAction?.Invoke();
-        sampleFunc?.Invoke(10, 10);
-    }
+        public event Func<int, int, int> SampleFunc;
 
-    private void OnDestroy()
-    {
-        sampleAction -= Hoge;
-        sampleAction -= Hog2;
-        sampleFunc -= Add;
-    }
+        [SerializeField]
+        private Button _sampleButton;
 
-    private void Hoge()
-    {
-        Debug.Log("Hoge");
-    }
+        [SerializeField]
+        private SampleUnityEvent _sampleUnityEvent;
 
-    private void Hog2()
-    {
-        Debug.Log("Hoge2");
-    }
+        private void Start()
+        {
+            // ① Button の onClick も、中身は同じ仕組み
+            if (_sampleButton != null)
+            {
+                _sampleButton.onClick.AddListener(LogFirst);
+                _sampleButton.onClick.AddListener(LogSecond);
+            }
 
-    private int Add(int a, int b)
-    {
-        var result = a + b;
-        Debug.Log($"{result} = {a} + {b}");
-        return result;
+            // ② Inspector から登録できる UnityEvent
+            _sampleUnityEvent?.Invoke();
+
+            // ③ C# の素の event
+            SampleAction += LogFirst;
+            SampleAction += LogSecond;
+            SampleFunc += Add;
+
+            // 登録が 0 件のときに Invoke すると例外になるため ?. で守る
+            SampleAction?.Invoke();
+
+            // ⚠️ Func を複数登録しても、受け取れるのは最後に登録した1つの戻り値だけ
+            SampleFunc?.Invoke(10, 10);
+        }
+
+        private void OnDestroy()
+        {
+            if (_sampleButton != null)
+            {
+                _sampleButton.onClick.RemoveListener(LogFirst);
+                _sampleButton.onClick.RemoveListener(LogSecond);
+            }
+
+            // 登録したら必ず外す。外し忘れると、消えたはずのオブジェクトが呼ばれ続ける
+            SampleAction -= LogFirst;
+            SampleAction -= LogSecond;
+            SampleFunc -= Add;
+        }
+
+        private void LogFirst()
+        {
+            Debug.Log("1つめの処理");
+        }
+
+        private void LogSecond()
+        {
+            Debug.Log("2つめの処理");
+        }
+
+        private int Add(int a, int b)
+        {
+            var result = a + b;
+            Debug.Log($"{a} + {b} = {result}");
+            return result;
+        }
     }
 }

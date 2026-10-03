@@ -1,0 +1,25 @@
+{
+    "name": "DemoGame",
+    "rootNamespace": "DemoGame",
+    "references": [
+        "Cinemachine",
+        "Unity.InputSystem",
+        "Unity.AI.Navigation",
+        "UnityEngine.UI",
+        "Unity.TextMeshPro",
+        "UniTask",
+        "Unity.RenderPipelines.Core.Runtime",
+        "Unity.RenderPipelines.Universal.Runtime",
+        "Unity.Animation.Rigging",
+        "Unity.Timeline"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

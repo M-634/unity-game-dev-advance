@@ -1,0 +1,19 @@
+{
+    "name": "Demo.Debug",
+    "rootNamespace": "Demo.Debug",
+    "references": [
+        "DemoGame",
+        "Unity.InputSystem"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "UNITY_EDITOR || APP_DEBUG"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
