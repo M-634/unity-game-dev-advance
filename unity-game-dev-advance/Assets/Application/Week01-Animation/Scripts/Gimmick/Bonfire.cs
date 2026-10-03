@@ -11,10 +11,7 @@ namespace Week01
     public class Bonfire : MonoBehaviour, IInteractable
     {
         private static readonly List<Bonfire> Weakenable = new List<Bonfire>();
-
-        [SerializeField]
-        private GameProgress _progress;
-
+        
         [Header("ボス戦の篝火")]
         [Tooltip("叩きつけで弱くなるか（ボス戦の篝火）")]
         [SerializeField]
@@ -72,23 +69,10 @@ namespace Week01
         public Observable<Staff> Refilled => _refilled;
 
         public bool IsBurning => _strength.Value > 0;
-
-        // ボスの地面叩きつけで呼ぶ。部屋の篝火がすべて1段弱くなる
-        public static void WeakenAll()
-        {
-            for (int i = Weakenable.Count - 1; i >= 0; i--)
-            {
-                Weakenable[i].Weaken();
-            }
-        }
+        
 
         private void Awake()
         {
-            if (_progress == null)
-            {
-                _progress = FindFirstObjectByType<GameProgress>();
-            }
-
             if (_flame != null)
             {
                 _flameScale = _flame.localScale;
@@ -121,16 +105,7 @@ namespace Week01
 
         public string Prompt => "Kindle";
 
-        public bool CanInteract(PlayerInteractor interactor)
-        {
-            if (!IsBurning || PlayerStaffReach.IsBusy(interactor)) return false;
-
-            var staff = interactor.GetComponentInParent<Staff>();
-            if (staff == null || !staff.IsOwned.CurrentValue) return false;
-
-            // 火が満タンで、もう光らせられないなら出さない（E を押しても何も起きないので）
-            return staff.Flame.CurrentValue < Staff.MaxFlame || staff.Glow.CurrentValue < GlowFor(staff);
-        }
+        public bool CanInteract(PlayerInteractor interactor) => true;
 
         public void Interact(PlayerInteractor interactor)
         {
@@ -140,20 +115,15 @@ namespace Week01
             Vector3 point = ReachPosition();
             PlayerStaffReach.ReachOrRun(interactor, point, () =>
             {
-                // 腕を伸ばしている間に消えていたら移らない
-                if (IsBurning && staff.Refill(GlowFor(staff)))
+                // 手が届いた時点で、消えている杖だけに火を移す。光の段は上げない
+                if (IsBurning && staff != null && !staff.IsLit && staff.Refill(0))
                 {
                     FxSpawner.Spawn(_kindleEffect, point);
                     _refilled.OnNext(staff);
                 }
             });
         }
-
-        private int GlowFor(Staff staff)
-        {
-            return _fullCharge ? Staff.MaxGlowLevel : staff.MaxGlow;
-        }
-
+        
         private Vector3 ReachPosition()
         {
             if (_reachPoint != null) return _reachPoint.position;

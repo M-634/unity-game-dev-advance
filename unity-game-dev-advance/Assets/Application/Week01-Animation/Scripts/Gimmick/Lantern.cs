@@ -8,10 +8,7 @@ namespace Week01
     public class Lantern : MonoBehaviour
     {
         private static readonly int EmissionColorId = Shader.PropertyToID("_EmissionColor");
-
-        [SerializeField]
-        private GameProgress _progress;
-
+        
         [Header("見た目")]
         [SerializeField]
         private Renderer _renderer;
@@ -63,12 +60,7 @@ namespace Week01
             {
                 _renderer = GetComponentInChildren<Renderer>();
             }
-
-            if (_progress == null)
-            {
-                _progress = FindFirstObjectByType<GameProgress>();
-            }
-
+            
             if (_renderer != null)
             {
                 _material = _renderer.material;
@@ -149,11 +141,6 @@ namespace Week01
 
             _litUp.OnNext(Unit.Default);
             _litUp.OnCompleted();
-
-            if (_progress != null)
-            {
-                _progress.AddLit();
-            }
         }
 
         // 炎の大きさ（火だけ：小さく ／ 点いた：そのまま）

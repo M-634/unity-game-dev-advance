@@ -12,9 +12,6 @@ namespace Week01
         public const float MaxFlame = 100f;
         public const int MaxGlowLevel = 3;
 
-        [SerializeField]
-        private GameProgress _progress;
-
         [Tooltip("杖の見た目（WeaponSocket の下の杖の Prefab）。未設定なら子から探す")]
         [SerializeField]
         private StaffVisual _visual;
@@ -37,10 +34,7 @@ namespace Week01
         public ReadOnlyReactiveProperty<int> Glow => _glow;
 
         public bool IsLit => _isOwned.Value && _flame.Value > 0f;
-
-        // 篝火で光らせられる段。点けた灯火の数
-        public int MaxGlow => _progress != null ? Mathf.Clamp(_progress.LitCount.CurrentValue, 0, MaxGlowLevel) : 0;
-
+        
         // 火焔玉を出す位置。見た目が無ければ自分の位置
         public Transform Muzzle => _visual != null && _visual.Muzzle != null ? _visual.Muzzle : transform;
 
@@ -48,11 +42,6 @@ namespace Week01
 
         private void Awake()
         {
-            if (_progress == null)
-            {
-                _progress = FindFirstObjectByType<GameProgress>();
-            }
-
             if (_visual == null)
             {
                 _visual = GetComponentInChildren<StaffVisual>(true);

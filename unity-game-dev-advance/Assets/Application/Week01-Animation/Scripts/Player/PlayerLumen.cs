@@ -9,10 +9,7 @@ namespace Week01
     public class PlayerLumen : MonoBehaviour
     {
         public const float MaxLumen = 100f;
-
-        [SerializeField]
-        private GameProgress _progress;
-
+        
         [SerializeField]
         private Staff _staff;
 
@@ -42,11 +39,6 @@ namespace Week01
 
         private void Awake()
         {
-            if (_progress == null)
-            {
-                _progress = FindFirstObjectByType<GameProgress>();
-            }
-
             if (_staff == null)
             {
                 _staff = GetComponent<Staff>();
@@ -70,13 +62,7 @@ namespace Week01
         private float CalculateTarget()
         {
             float value = 0f;
-
-            if (_progress != null && _baseByLitCount.Length > 0)
-            {
-                int index = Mathf.Clamp(_progress.LitCount.CurrentValue, 0, _baseByLitCount.Length - 1);
-                value += _baseByLitCount[index];
-            }
-
+            
             if (_staff != null && _staff.IsLit)
             {
                 value += _flameAmount * _staff.Flame.CurrentValue / Staff.MaxFlame;
