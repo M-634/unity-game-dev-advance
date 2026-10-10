@@ -2420,7 +2420,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1696761157445665219, guid: a07475e4273b4f709ee27988f7c59dcb, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1696761157445665219, guid: a07475e4273b4f709ee27988f7c59dcb, type: 3}
       propertyPath: _drawGizmo
@@ -2428,7 +2428,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4140049290891852783, guid: a07475e4273b4f709ee27988f7c59dcb, type: 3}
       propertyPath: _jumpHeight
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4140049290891852783, guid: a07475e4273b4f709ee27988f7c59dcb, type: 3}
       propertyPath: _cameraTransform
