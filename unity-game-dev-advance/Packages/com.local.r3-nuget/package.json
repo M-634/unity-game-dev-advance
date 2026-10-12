@@ -1,0 +1,12 @@
+{
+  "name": "com.local.r3-nuget",
+  "displayName": "R3 (NuGet DLLs)",
+  "version": "1.3.1",
+  "unity": "6000.3",
+  "description": "授業用プロジェクトに同梱した R3 本体と依存 DLL です。NuGet から取得した DLL をそのまま入れているので、NuGetForUnity やネットワーク接続は不要です。\n\n同梱バージョン:\n- R3 1.3.1\n- Microsoft.Bcl.TimeProvider 8.0.0\n- Microsoft.Bcl.AsyncInterfaces 6.0.0\n- System.Threading.Channels 8.0.0\n- System.ComponentModel.Annotations 5.0.0\n- System.Runtime.CompilerServices.Unsafe 6.0.0",
+  "keywords": [
+    "R3",
+    "Rx",
+    "NuGet"
+  ]
+}
