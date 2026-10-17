@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // タイトルの View と Model をつなぐ。画面の切り替え・シーン遷移・終了はここで決める。
     public class TitlePresenter : MonoBehaviour
     {
         [SerializeField]
@@ -23,19 +22,16 @@ namespace DemoGame
                 return;
             }
 
-            // インゲームから戻ってきたときは、カーソルが固定されたままになっている
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
 
             _model = new TitleModel();
 
-            // View → Model
             _view.StartClicked.Subscribe(_ => _model.RequestStart()).AddTo(_disposables);
             _view.SettingsClicked.Subscribe(_ => _model.OpenSettings()).AddTo(_disposables);
             _view.QuitClicked.Subscribe(_ => _model.RequestQuit()).AddTo(_disposables);
             _settings.Closed.Subscribe(_ => _model.CloseSettings()).AddTo(_disposables);
 
-            // Model → View・シーン
             _model.Screen.Subscribe(ShowScreen).AddTo(_disposables);
 
             _model.IsStartRequested.Where(x => x).Subscribe(_ =>

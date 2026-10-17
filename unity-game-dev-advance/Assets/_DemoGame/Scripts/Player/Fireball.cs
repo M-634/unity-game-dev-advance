@@ -4,9 +4,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // 火焔玉の弾。まっすぐ飛び、最初に当たった物で弾ける。設計：doc/demo-game/10-level-design.md §5
-    // 当たりは Physics の接触ではなく、毎フレーム「前の位置から今の位置まで」の SphereCast で調べる（速くてもすり抜けない）
-    // 使い回す（Object Pool）。弾けたら・時間切れになったら Launch で渡された返し先へ戻る
     public class Fireball : MonoBehaviour
     {
         [SerializeField, Range(1f, 60f)]
@@ -71,8 +68,6 @@ namespace DemoGame
 
         private float Radius => _radius * _scale;
 
-        // explosionRadius が 0 なら当たった相手だけ。0 より大きければ、弾けた位置のまわりにもダメージ
-        // release が null なら、終わったら Destroy する
         public void Launch(Vector3 direction, int damage, float scale, float explosionRadius, Transform ownerRoot, Action<AttackHit> onHit, Action<Fireball> release = null)
         {
             _release = release;
@@ -99,7 +94,6 @@ namespace DemoGame
                 _light.range = _lightRange * Mathf.Sqrt(scale);
             }
 
-            // 撃った位置で、すでに何かに重なっていたらその場で弾ける（目の前の敵）
             int count = Physics.OverlapSphereNonAlloc(transform.position, Radius, _overlapBuffer, _hitLayers, QueryTriggerInteraction.Ignore);
             for (int i = 0; i < count; i++)
             {
@@ -139,7 +133,6 @@ namespace DemoGame
             if (nearest >= 0)
             {
                 var hit = _castBuffer[nearest];
-                // distance が 0 のときは point が入らないので、今の位置で弾けさせる
                 Vector3 point = hit.distance > 0f ? hit.point : origin;
                 transform.position = origin + _direction * hit.distance;
                 Explode(point, hit.collider);
@@ -205,7 +198,6 @@ namespace DemoGame
             var target = col.GetComponentInParent<IDamageable>();
             if (target == null || target.IsDead) return;
 
-            // 1つの相手が複数のコライダーを持っていても、ダメージは1回だけ
             if (!_damaged.Add(target)) return;
 
             int damage = target.TakeDamage(_damage);

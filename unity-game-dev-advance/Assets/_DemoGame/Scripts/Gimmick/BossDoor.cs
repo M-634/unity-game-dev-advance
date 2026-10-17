@@ -4,8 +4,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // 扉は封印（BossDoorSeal）を購読しているだけ。灯の側は扉の存在を知らない。
-    // 封印が無いときは、GameProgress の「灯が全部点いた」で開く
     public class BossDoor : MonoBehaviour
     {
         [Tooltip("紋様が全部消えたら開く")]
@@ -32,7 +30,6 @@ namespace DemoGame
         public Observable<Unit> Opened => _opened;
         public bool IsOpen { get; private set; }
 
-        // 開ききった
         public bool IsFullyOpen { get; private set; }
 
         private Vector3 _closedPosition;

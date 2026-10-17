@@ -6,9 +6,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // スイッチで扉を開け閉めする。スイッチは扉を知らない。扉がスイッチを購読する
-    //   Hold ：押されている間だけ開く。離されたら _closeDelay 秒で閉じ始める（灯火 1。箱をスイッチに載せて開けておく）
-    //   Timed：押されたら「開く → _openSeconds 待つ → 閉じる」
     public class TimedDoor : MonoBehaviour
     {
         public enum OpenMode
@@ -80,7 +77,6 @@ namespace DemoGame
             }
         }
 
-        // 開いている途中・待っている途中に押されても（離されても）、今の流れを止めてやり直す
         private void Restart(Func<CancellationToken, UniTask> run)
         {
             _cycle?.Cancel();
@@ -96,7 +92,6 @@ namespace DemoGame
 
             await _door.OpenAsync(ct);
 
-            // Hold は離されるまで開けたまま
             if (_mode == OpenMode.Hold) return;
 
             float waitSeconds = Mathf.Max(0f, _openSeconds - _warningSeconds);
@@ -105,7 +100,6 @@ namespace DemoGame
             await WarnAndCloseAsync(_warningSeconds, ct);
         }
 
-        // Hold：離されたら、少しだけ待って（点滅して）閉じる
         private async UniTask RunReleasedAsync(CancellationToken ct)
         {
             float warning = Mathf.Min(_warningSeconds, _closeDelay);
@@ -118,7 +112,6 @@ namespace DemoGame
             await WarnAndCloseAsync(warning, ct);
         }
 
-        // 最後の数秒は点滅して知らせる
         private async UniTask WarnAndCloseAsync(float warningSeconds, CancellationToken ct)
         {
             float end = Time.time + warningSeconds;

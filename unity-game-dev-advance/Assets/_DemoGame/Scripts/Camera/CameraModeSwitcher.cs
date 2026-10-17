@@ -5,8 +5,6 @@ using UnityEngine.InputSystem;
 
 namespace DemoGame
 {
-    // TPS（FreeLook）と FPS（POV）を Priority の入れ替えで切り替える
-    // プレイヤーはカメラを知らない。ここが PlayerController.ViewMode を設定する
     public class CameraModeSwitcher : MonoBehaviour
     {
         [SerializeField]
@@ -86,7 +84,6 @@ namespace DemoGame
 
         private void Update()
         {
-            // 箱を押し始めたら TPS に戻す（押している間は FPS にしない）
             if (_mode.Value == CameraMode.Fps && _player != null && _player.IsMovementLocked)
             {
                 Apply(CameraMode.Tps, syncDirection: true);
@@ -116,7 +113,6 @@ namespace DemoGame
         {
             if (syncDirection && _outputCamera != null)
             {
-                // 切り替え先のカメラに、今の向きを写してから入れ替える（視線が飛ばないように）
                 float yaw = _outputCamera.eulerAngles.y;
                 float pitch = Mathf.DeltaAngle(0f, _outputCamera.eulerAngles.x);
 

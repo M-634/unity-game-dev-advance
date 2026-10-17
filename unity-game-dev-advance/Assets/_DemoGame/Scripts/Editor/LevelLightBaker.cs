@@ -7,11 +7,6 @@ using UnityEngine.SceneManagement;
 
 namespace DemoGame
 {
-    // ステージのベイク。設計：doc/demo-game/11-lighting.md §2・§3
-    //
-    // ・アクティブなシーンの LevelRoot の下で、Layer が Level の物だけを静的にして間接光をライトマップに焼く
-    // ・LevelRoot の下のそれ以外（動くギミック・ロジック）は静的を外し、Light Probe で受ける
-    // ・直接光はトゥーンの段を出すため実行時に計算する（Mixed Lighting Mode = Baked Indirect）
     public static class LevelLightBaker
     {
         private const string MenuRoot = "DemoGame/Lighting/";
@@ -35,7 +30,6 @@ namespace DemoGame
             AssignLightingSettings();
             CheckLights();
 
-            // ベイクの結果はシーンの横のフォルダに保存されるので、シーンが保存されている必要がある
             if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
 
             if (!Lightmapping.BakeAsync())
@@ -64,7 +58,6 @@ namespace DemoGame
             return !EditorApplication.isPlayingOrWillChangePlaymode && !Lightmapping.isRunning;
         }
 
-        // §2 の表のとおりに Static と GI の受け方を設定する。LevelRoot が無ければ false
         private static bool ApplyStaticFlags()
         {
             int levelLayer = EnsureLevelLayer();
@@ -135,7 +128,6 @@ namespace DemoGame
             return true;
         }
 
-        // Layer Level を User Layer 9 に用意する。別の名前で使われていたら -1
         private static int EnsureLevelLayer()
         {
             int layer = LayerMask.NameToLayer(LevelLayerName);
@@ -170,7 +162,6 @@ namespace DemoGame
             return result;
         }
 
-        // LevelRoot の外にある Level レイヤーの物は焼かれない。置き間違いに気づけるように知らせる
         private static void WarnLevelLayerOutsideRoot(Scene scene, List<GameObject> levelRoots, int levelLayer)
         {
             foreach (var root in scene.GetRootGameObjects())
@@ -186,7 +177,6 @@ namespace DemoGame
             }
         }
 
-        // §3.1 の Lighting Settings を割り当てる。無ければ作る
         private static void AssignLightingSettings()
         {
             var settings = AssetDatabase.LoadAssetAtPath<LightingSettings>(SettingsPath);
@@ -216,7 +206,6 @@ namespace DemoGame
             Debug.Log($"{nameof(LevelLightBaker)}: シーンに {settings.name} を割り当てました。");
         }
 
-        // §4：Baked のライトは直接光が焼かれてトゥーンの段が消えるので使わない
         private static void CheckLights()
         {
             var scene = SceneManager.GetActiveScene();

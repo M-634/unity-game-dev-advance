@@ -11,7 +11,7 @@ namespace DemoGame
         [Tooltip("被弾後、次のダメージを受け付けない時間（秒）")]
         [SerializeField, Range(0f, 5f)]
         private float _invincibleTime = 1f;
-        
+
         [Header("デバック用の無敵モード")]
         [SerializeField]
         public bool _debugInvincibleMode;
@@ -23,8 +23,6 @@ namespace DemoGame
         public ReadOnlyReactiveProperty<int> CurrentHp => _currentHp;
         public bool IsDead => _currentHp.Value <= 0;
 
-        // ReactiveProperty から作ると、購読した瞬間に初期値(0)が流れて
-        // いきなり死亡扱いになってしまうので、明示的に通知する
         public Observable<Unit> Died => _died;
 
         private float _invincibleUntil;
@@ -34,7 +32,6 @@ namespace DemoGame
             _currentHp.Value = _maxHp;
         }
 
-        // プレイヤーは防御力を持たないので、攻撃力がそのままダメージになる
         public int TakeDamage(int attackPower)
         {
             if(_debugInvincibleMode) return 0;
@@ -48,13 +45,18 @@ namespace DemoGame
             if (!IsDead) return damage;
 
             _died.OnNext(Unit.Default);
-            _died.OnCompleted();
             return damage;
         }
 
         public void ResetHp()
         {
             _invincibleUntil = 0f;
+            _currentHp.Value = _maxHp;
+        }
+
+        public void Revive()
+        {
+            _invincibleUntil = Time.time + _invincibleTime;
             _currentHp.Value = _maxHp;
         }
 

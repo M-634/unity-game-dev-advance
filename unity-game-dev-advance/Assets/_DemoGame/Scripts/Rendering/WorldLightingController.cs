@@ -4,8 +4,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // 世界の明るさ。点けた灯火の数で、主光源・霧を変える。設計：doc/demo-game/11-lighting.md §5.1
-    // ライトマップの物には実行時の Ambient の変更が効かないので、主光源（直接光は実行時）と霧で明るさを出す
     public class WorldLightingController : MonoBehaviour
     {
         [Serializable]

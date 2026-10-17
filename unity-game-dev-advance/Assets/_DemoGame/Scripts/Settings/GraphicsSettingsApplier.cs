@@ -6,8 +6,6 @@ using UnityEngine.Rendering.Universal;
 
 namespace DemoGame
 {
-    // SettingsModel を購読して、グラフィックの設定を Unity に反映する。
-    // URP アセットと vSyncCount は Editor では書き換えるとプロジェクトに残るので、Dispose で元に戻す。
     public sealed class GraphicsSettingsApplier : IDisposable
     {
         private readonly CompositeDisposable _disposables = new();
@@ -45,7 +43,6 @@ namespace DemoGame
         private static void ApplyScreen(ScreenResolution resolution, ScreenMode mode)
         {
 #if UNITY_EDITOR
-            // Game ビューの大きさは変えられないので、Editor では何もしない
 #else
             if (resolution.IsNative)
             {

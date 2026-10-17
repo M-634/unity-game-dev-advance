@@ -8,6 +8,7 @@ namespace DemoGame
     {
         private const string PlayerMapName = "Player";
         private const string CutsceneMapName = "Cutscene";
+        private const string SystemMapName = "System";
 
         [SerializeField]
         private InputActionAsset _inputActions;
@@ -20,7 +21,6 @@ namespace DemoGame
 
         public event Action Jumped;
 
-        // 押した瞬間。チャージは押してから離すまでの時間で数えるので、離した瞬間も流す
         public event Action Attacked;
 
         public event Action AttackReleased;
@@ -31,16 +31,24 @@ namespace DemoGame
 
         public event Action SwitchViewPressed;
 
-        // 演出中だけ有効（Cutscene マップ）
         public event Action SkipPressed;
+
+        public event Action PausePressed;
+
+        public bool IsCutsceneMode => _cutsceneMap != null && _cutsceneMap.enabled;
+
+        public bool IsPaused { get; private set; }
 
         public bool IsSkipHeld => _skipAction != null && _skipAction.IsPressed();
 
-        // Cinemachine の InputProvider に渡すため、Look アクションそのものを公開する
         public InputAction LookAction => _lookAction;
 
         private InputActionMap _playerMap;
         private InputActionMap _cutsceneMap;
+        private InputActionMap _systemMap;
+        private InputAction _pauseAction;
+        private bool _wasPlayerEnabledBeforePause;
+        private bool _wasCutsceneEnabledBeforePause;
         private InputAction _skipAction;
         private InputAction _moveAction;
         private InputAction _lookAction;
@@ -70,6 +78,9 @@ namespace DemoGame
 
             _cutsceneMap = _inputActions.FindActionMap(CutsceneMapName, throwIfNotFound: true);
             _skipAction = _cutsceneMap.FindAction("Skip", throwIfNotFound: true);
+
+            _systemMap = _inputActions.FindActionMap(SystemMapName, throwIfNotFound: true);
+            _pauseAction = _systemMap.FindAction("Pause", throwIfNotFound: true);
         }
 
         private void OnEnable()
@@ -89,8 +100,10 @@ namespace DemoGame
             _interactAction.performed += OnInteract;
             _switchViewAction.performed += OnSwitchView;
             _skipAction.performed += OnSkip;
+            _pauseAction.performed += OnPause;
 
             _playerMap.Enable();
+            _systemMap.Enable();
         }
 
         private void OnDisable()
@@ -110,12 +123,13 @@ namespace DemoGame
             _interactAction.performed -= OnInteract;
             _switchViewAction.performed -= OnSwitchView;
             _skipAction.performed -= OnSkip;
+            _pauseAction.performed -= OnPause;
 
             _cutsceneMap.Disable();
+            _systemMap.Disable();
 
             _playerMap.Disable();
 
-            // 押しっぱなしのまま無効化されると入力が残り続けるため、ここで消す
             Move = Vector2.zero;
             Look = Vector2.zero;
             IsSprinting = false;
@@ -138,7 +152,25 @@ namespace DemoGame
             }
         }
 
-        // 演出中は Player マップを止め、Cutscene マップ（スキップ）だけを有効にする
+        public void SetPaused(bool isPaused)
+        {
+            if (_playerMap == null || IsPaused == isPaused) return;
+
+            IsPaused = isPaused;
+
+            if (isPaused)
+            {
+                _wasPlayerEnabledBeforePause = _playerMap.enabled;
+                _wasCutsceneEnabledBeforePause = _cutsceneMap.enabled;
+                _cutsceneMap.Disable();
+                SetInputEnabled(false);
+                return;
+            }
+
+            if (_wasCutsceneEnabledBeforePause) _cutsceneMap.Enable();
+            if (_wasPlayerEnabledBeforePause) SetInputEnabled(true);
+        }
+
         public void SetCutsceneMode(bool isCutscene)
         {
             if (_cutsceneMap == null) return;
@@ -165,5 +197,6 @@ namespace DemoGame
         private void OnInteract(InputAction.CallbackContext context) => Interacted?.Invoke();
         private void OnSwitchView(InputAction.CallbackContext context) => SwitchViewPressed?.Invoke();
         private void OnSkip(InputAction.CallbackContext context) => SkipPressed?.Invoke();
+        private void OnPause(InputAction.CallbackContext context) => PausePressed?.Invoke();
     }
 }

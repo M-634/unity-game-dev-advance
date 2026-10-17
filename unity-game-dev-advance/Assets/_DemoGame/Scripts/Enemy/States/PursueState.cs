@@ -2,7 +2,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // プレイヤーを追いかける。攻撃範囲に入ったら、攻撃間隔が空くのを待って攻撃する
     public sealed class PursueState : IState
     {
         private readonly EnemyController _owner;

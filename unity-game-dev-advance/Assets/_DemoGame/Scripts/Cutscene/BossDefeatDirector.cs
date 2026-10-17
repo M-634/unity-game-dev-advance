@@ -6,8 +6,6 @@ using UnityEngine.Playables;
 
 namespace DemoGame
 {
-    // ボス撃破の演出。ボスが溶けて消えたら、いた場所に光が生まれ、光の束が天井へ昇る。設計：doc/demo-game/10-level-design.md §8
-    // 演出のあと操作に戻り、光（ClearBeacon）に触れたらクリア（InGameController が見張る）
     public class BossDefeatDirector : MonoBehaviour
     {
         [SerializeField]
@@ -46,7 +44,6 @@ namespace DemoGame
 
         private async UniTask PlayAsync(CancellationToken ct)
         {
-            // ボスは溶けて消えると Destroy されるので、先に位置を覚えておく
             Vector3 position = _boss.transform.position;
 
             await UniTask.Delay(System.TimeSpan.FromSeconds(_appearDelay), cancellationToken: ct);

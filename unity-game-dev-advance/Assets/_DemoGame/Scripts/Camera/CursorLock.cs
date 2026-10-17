@@ -2,7 +2,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // 再生中はカーソルを画面内に固定して隠す
     public class CursorLock : MonoBehaviour
     {
         [SerializeField]

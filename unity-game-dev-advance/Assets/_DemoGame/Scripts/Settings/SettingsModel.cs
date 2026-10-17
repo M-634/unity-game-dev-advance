@@ -5,10 +5,8 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // 設定の値そのもの。どこに保存されるか、どう反映されるかは知らない。
     public sealed class SettingsModel : IDisposable
     {
-        // 0 は上限なし
         public static readonly IReadOnlyList<int> FrameRateChoices = new[] { 30, 60, 120, 144, 0 };
 
         private readonly ReactiveProperty<ScreenResolution> _resolution = new(ScreenResolution.Native);

@@ -1,6 +1,5 @@
 namespace DemoGame
 {
-    // 初期化。NavMesh に乗せ、追う相手を探し、動き出してよくなるまで待つ
     public sealed class InitState : IState
     {
         private readonly EnemyController _owner;
@@ -19,7 +18,6 @@ namespace DemoGame
 
         public void OnUpdate()
         {
-            // NavMesh が焼けるのが遅れたときに備えて、乗れるまで試す
             if (!_owner.EnsureOnNavMesh()) return;
             if (!_owner.CanStart) return;
 

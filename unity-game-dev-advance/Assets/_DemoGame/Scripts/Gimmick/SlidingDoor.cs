@@ -4,8 +4,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // 決まった距離だけ滑って開く扉。開ける／閉めるだけで、いつ開くかは知らない（TimedDoor・EncounterRoom が決める）
-    // Scene には「閉じた位置」で置く
     public class SlidingDoor : MonoBehaviour
     {
         [Tooltip("動かす対象。未設定なら自分を動かす")]
@@ -73,7 +71,6 @@ namespace DemoGame
 
         private async UniTask MoveAsync(Vector3 target, bool waitForPlayer, CancellationToken token)
         {
-            // 前の動き（開く途中に閉じる、など）は止めてから動かす
             _moveCts?.Cancel();
             _moveCts?.Dispose();
             _moveCts = CancellationTokenSource.CreateLinkedTokenSource(token, destroyCancellationToken);
@@ -85,7 +82,6 @@ namespace DemoGame
             {
                 if (waitForPlayer && IsPlayerInside())
                 {
-                    // 閉じかけでもいったん止まり、プレイヤーが抜けるのを待つ
                     await UniTask.Yield(PlayerLoopTiming.Update, ct);
                     continue;
                 }
@@ -103,7 +99,6 @@ namespace DemoGame
             _moveCts?.Dispose();
         }
 
-        // 閉じきった状態での扉の範囲にプレイヤーがいるか
         private bool IsPlayerInside()
         {
             if (_blockArea == null) return false;

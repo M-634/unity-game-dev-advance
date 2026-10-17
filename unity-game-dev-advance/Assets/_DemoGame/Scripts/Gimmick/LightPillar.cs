@@ -2,9 +2,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // 天へ昇る光の柱。有効になったら、下から上へ伸びる。設計：doc/demo-game/12-vfx.md #9
-    // 灯火の点灯と、ボス撃破のあとの光（ClearBeacon）で使う
-    // エフェクト（Particle System）ができるまでは、縦に伸ばしたメッシュとライトで見せる
     public class LightPillar : MonoBehaviour
     {
         [Tooltip("縦に伸ばすもの（柱のメッシュ。原点が下端）")]
@@ -62,7 +59,6 @@ namespace DemoGame
 
         private void Apply(float t)
         {
-            // 速く伸び始めて、ゆっくり止まる
             float eased = 1f - (1f - t) * (1f - t);
 
             if (_beam != null)

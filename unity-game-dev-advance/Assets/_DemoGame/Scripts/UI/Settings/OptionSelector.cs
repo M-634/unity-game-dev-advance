@@ -8,8 +8,6 @@ using UnityEngine.UI;
 
 namespace DemoGame
 {
-    // 「< 値 >」の選択部品。左右キー・決定・矢印のクリックで値が変わる。
-    // 選ばれた番号を流すだけで、番号が何を意味するかは知らない。
     public class OptionSelector : Selectable, ISubmitHandler
     {
         [SerializeField]
@@ -60,7 +58,6 @@ namespace DemoGame
         {
             base.Awake();
 
-            // Selectable は Edit Mode でも動くので、再生中だけつなぐ
             if (!Application.isPlaying) return;
 
             if (_previousButton != null) _previousButton.onClick.AddListener(OnPreviousClicked);
@@ -100,7 +97,6 @@ namespace DemoGame
             Select();
         }
 
-        // 端まで行ったら反対側へ回る
         private void Step(int delta)
         {
             if (!IsInteractable() || _options.Count <= 1) return;

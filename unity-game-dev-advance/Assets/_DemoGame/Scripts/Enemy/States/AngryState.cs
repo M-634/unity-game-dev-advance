@@ -2,7 +2,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // ボス。咆哮して、攻撃力と防御力を上げる。上がった値は倒されるまで続く
     public sealed class AngryState : IState
     {
         private readonly BossController _owner;

@@ -5,9 +5,6 @@ using UnityEngine.Rendering.Universal;
 
 namespace DemoGame
 {
-    // 画面全体の輪郭線の設定。Volume の Add Override → DemoGame/Outline で追加する
-    // 値を持つだけで、描くのは OutlineRendererFeature
-    // Volume でブレンドされるので、エリアごとに線を変えられる（ボス部屋だけ太く、など）
     [Serializable, VolumeComponentMenu("DemoGame/Outline")]
     [SupportedOnRenderPipeline(typeof(UniversalRenderPipelineAsset))]
     public sealed class OutlineVolume : VolumeComponent, IPostProcessComponent

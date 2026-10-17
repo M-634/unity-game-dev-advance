@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 namespace DemoGame
 {
-    // 設定画面の部品を持つだけ。値が何を意味するか、どこに保存するかは知らない。
     public class SettingsView : MonoBehaviour
     {
         [Tooltip("画面全体。表示・非表示と操作の可否を切り替える")]
@@ -65,7 +64,6 @@ namespace DemoGame
 
         public Observable<Unit> ResetClicked => _resetClicked;
 
-        // BACK ボタンとキャンセル入力の両方
         public Observable<Unit> BackRequested => _backRequested;
 
         public void Show()

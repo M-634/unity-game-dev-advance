@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // ボスだけが持つ数値
     [Serializable]
     public class BossParameters
     {

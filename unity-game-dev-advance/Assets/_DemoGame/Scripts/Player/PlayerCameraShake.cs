@@ -4,8 +4,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // 被弾と、高いところからの着地で画面を揺らす（Cinemachine Impulse）
-    // 揺れを受け取るのは各カメラの CinemachineImpulseListener
     public class PlayerCameraShake : MonoBehaviour
     {
         [SerializeField]

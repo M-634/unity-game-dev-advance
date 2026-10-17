@@ -5,8 +5,6 @@ using UnityEngine.Rendering.Universal;
 
 namespace DemoGame
 {
-    // 輪郭線の Render Graph パス
-    // カメラのカラーを読み、線を足した結果を新しいテクスチャに書いて、それをカメラのカラーに差し替える
     public class OutlinePass : ScriptableRenderPass
     {
         private static readonly int IntensityId = Shader.PropertyToID("_OutlineIntensity");
@@ -29,10 +27,8 @@ namespace DemoGame
             _material = material;
             profilingSampler = new ProfilingSampler("DemoGame Outline");
 
-            // SSAO と同じ DepthNormals を使う。SSAO が既に要求しているので、事前パスは増えない
             ConfigureInput(ScriptableRenderPassInput.Depth | ScriptableRenderPassInput.Normal);
 
-            // バックバッファには直接書けない（差し替えができない）ので、中間テクスチャを要求する
             requiresIntermediateTexture = true;
         }
 
@@ -80,13 +76,11 @@ namespace DemoGame
 
                 builder.SetRenderFunc((PassData data, RasterGraphContext context) =>
                 {
-                    // TextureHandle は RTHandle と RenderTargetIdentifier の両方に暗黙変換できるので、型を明示する
                     RTHandle sourceHandle = data.Source;
                     Blitter.BlitTexture(context.cmd, sourceHandle, new Vector4(1f, 1f, 0f, 0f), data.Material, 0);
                 });
             }
 
-            // コピーで書き戻さず、結果のテクスチャをそのままカメラのカラーにする
             resourceData.cameraColor = destination;
         }
     }

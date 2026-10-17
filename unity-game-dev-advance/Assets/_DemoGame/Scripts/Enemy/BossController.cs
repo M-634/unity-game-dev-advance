@@ -4,8 +4,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // 共通の敵に「怒り」と「無敵（構え）」を足したもの
-    // 部屋に入るまでは InitState で待ち、Activate() されたら Search を使わずにすぐ追う
     public class BossController : EnemyController
     {
         [Header("ボス")]
@@ -22,7 +20,6 @@ namespace DemoGame
         private readonly Subject<Unit> _defeated = new();
         private readonly ReactiveProperty<bool> _isAngry = new(false);
 
-        // 無敵に入るかを数えるための、最近の被弾の時刻
         private readonly Queue<float> _recentHitTimes = new Queue<float>();
 
         public BossParameters BossParameters => _bossParameters;
@@ -54,7 +51,6 @@ namespace DemoGame
             _activated.OnNext(Unit.Default);
         }
 
-        // AngryState が呼ぶ。一度だけ
         public void MarkAngry()
         {
             _isAngry.Value = true;

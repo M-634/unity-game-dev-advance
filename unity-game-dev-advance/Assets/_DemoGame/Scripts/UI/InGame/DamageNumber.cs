@@ -3,8 +3,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // 当たった位置に出るダメージ数。上に浮かびながら薄くなり、消える
-    // 向きは同じ GameObject の Billboard が合わせる
     public class DamageNumber : MonoBehaviour
     {
         [SerializeField]
@@ -73,15 +71,12 @@ namespace DemoGame
 
         private void Apply(float t)
         {
-            // 浮かび方は最初が速く、だんだん遅くする
             float rise = 1f - (1f - t) * (1f - t);
             transform.position = _startPosition + Vector3.up * (_riseHeight * rise);
 
-            // 最初の 15% で大きい状態から 1 に戻す
             float pop = Mathf.Lerp(_popScale, 1f, Mathf.Clamp01(t / 0.15f));
             transform.localScale = _baseScale * pop;
 
-            // 後半の半分で薄くする
             if (_text != null)
             {
                 var color = _currentColor;

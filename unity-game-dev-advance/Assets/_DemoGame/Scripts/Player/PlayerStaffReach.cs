@@ -6,9 +6,6 @@ using UnityEngine.Animations.Rigging;
 
 namespace DemoGame
 {
-    // 杖を持った右腕を、対象（篝火の炎・灯火・蔦）へ伸ばすアクション。設計：doc/demo-game/10-level-design.md §4.2・§4.3
-    // 右腕だけの Rig（Rig_Reach。Two Bone IK）の Weight を 0 → 1 → 0 と動かし、手が届いた瞬間に onReached を呼ぶ
-    // 箱押しの Rig_Hands とは別の Rig にしている（あちらは毎フレーム自分の Weight を書くため）
     public class PlayerStaffReach : MonoBehaviour
     {
         [SerializeField]
@@ -50,7 +47,6 @@ namespace DemoGame
             }
         }
 
-        // point へ腕を伸ばし、届いたら onReached。Rig が無ければすぐ onReached
         public void Reach(Vector3 point, Action onReached)
         {
             if (IsReaching) return;
@@ -71,7 +67,6 @@ namespace DemoGame
 
             try
             {
-                // 対象の方を向く（水平だけ）
                 if (_controller != null)
                 {
                     Vector3 toPoint = point - _controller.VisualRoot.position;
@@ -119,7 +114,6 @@ namespace DemoGame
             _rig.weight = to;
         }
 
-        // 腕を伸ばしている間は、動かない・攻撃しない
         private void Lock(bool isLocked)
         {
             if (_controller != null)
@@ -134,7 +128,6 @@ namespace DemoGame
             }
         }
 
-        // 働きかける側（篝火・灯火・蔦）が使う。腕を伸ばせないプレイヤーなら、すぐ onReached
         public static void ReachOrRun(PlayerInteractor interactor, Vector3 point, Action onReached)
         {
             var reach = interactor != null ? interactor.GetComponentInParent<PlayerStaffReach>() : null;

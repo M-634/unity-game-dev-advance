@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // 敵の共通の数値。状態ごとの細かい調整値は、各状態の設定（EnemyStateSettings.cs）にある
     [Serializable]
     public class EnemyParameters
     {

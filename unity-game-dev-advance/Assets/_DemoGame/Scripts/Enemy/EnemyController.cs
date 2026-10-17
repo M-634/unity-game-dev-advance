@@ -4,13 +4,9 @@ using UnityEngine.AI;
 
 namespace DemoGame
 {
-    // 敵の共通の制御。HP を持ち、状態（IState）を切り替えて動かす
-    // 状態は MonoBehaviour ではないので、状態が使う操作（移動・攻撃・見た目）はここが公開する
-    // どの状態からでも入る割り込み（死亡・デバッグ・被弾）は、状態ではなくここが決める
     [RequireComponent(typeof(NavMeshAgent))]
     public class EnemyController : MonoBehaviour, IDamageable
     {
-        // 全部の敵をデバッグモードにする。Demo.Debug の EnemyDebugToggle（F1）が書き換える
         public static bool DebugModeForAll { get; set; }
 
         [SerializeField]
@@ -58,11 +54,9 @@ namespace DemoGame
 
         private IDamageable _targetDamageable;
 
-        // 当たり判定の球を付けるボーン（_attack.HitBoneNames を Visual の子から探したもの）
         private Transform[] _hitBones = System.Array.Empty<Transform>();
         private readonly Collider[] _overlapBuffer = new Collider[16];
 
-        // 開発用の表示に使う。最後に当たった時刻と位置
         private float _lastHitTime = float.NegativeInfinity;
         private Vector3 _lastHitPoint;
         private float _nextAttackTime;
@@ -73,15 +67,12 @@ namespace DemoGame
         public ReadOnlyReactiveProperty<int> CurrentHp => _currentHp;
         public bool IsDead => _currentHp.Value <= 0;
 
-        // HP が 0 になった瞬間に一度だけ流れる
         public Observable<Unit> Died => _died;
 
-        // 攻撃が当たる時間帯に入った瞬間（当たったかどうかに関係なく）。ボスの地面叩きつけで篝火を弱くするのに使う
         public Observable<Unit> AttackImpact => _attackImpact;
 
         private readonly Subject<Unit> _attackImpact = new();
 
-        // AttackState が呼ぶ
         public void NotifyAttackImpact()
         {
             _attackImpact.OnNext(Unit.Default);
@@ -95,7 +86,6 @@ namespace DemoGame
         [SerializeField, Range(0.1f, 5f)]
         private float _deathEffectScale = 1f;
 
-        // DieState が呼ぶ。見た目の中心から出す
         public void SpawnDeathEffect()
         {
             if (_deathEffect == null) return;
@@ -112,13 +102,11 @@ namespace DemoGame
             FxSpawner.Spawn(_deathEffect, center, _deathEffectScale);
         }
 
-        // 状態が一時的に足す値（怒りなど）。数値そのもの（Parameters）は書き換えない
         public int AttackPowerBonus { get; set; }
         public int DefencePowerBonus { get; set; }
         public int AttackPower => _parameters.AttackPower + AttackPowerBonus;
         public int DefencePower => _parameters.DefencePower + DefencePowerBonus;
 
-        // 状態が切り替える。true の間はダメージを受けない／どんな攻撃でも倒れる
         public bool IsInvincible { get; set; }
         public bool IsOneHitKill { get; set; }
 
@@ -137,7 +125,6 @@ namespace DemoGame
         public IState DieState { get; private set; }
         public IState DebugState { get; private set; }
 
-        // InitState が待つ条件と、そのあとに入る状態。ボスは「起動されるまで待って、すぐ追う」に変える
         public virtual bool CanStart => true;
         public virtual IState FirstState => SearchState;
 
@@ -150,7 +137,6 @@ namespace DemoGame
             _agent.isActiveAndEnabled && _agent.isOnNavMesh && !_agent.pathPending
             && _agent.remainingDistance <= _agent.stoppingDistance + 0.1f;
 
-        // ドメインの再読み込みを切っていても、再生のたびに OFF から始める
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void ResetStatics()
         {
@@ -184,7 +170,6 @@ namespace DemoGame
             CreateStates();
         }
 
-        // 派生クラスが状態を足すところ
         protected virtual void CreateStates()
         {
         }
@@ -253,7 +238,6 @@ namespace DemoGame
             return damage;
         }
 
-        // 被弾して、まだ生きているとき。どの割り込みに入るかを決める
         protected virtual void OnDamaged(int damage)
         {
             TryStagger();
@@ -263,7 +247,6 @@ namespace DemoGame
         {
         }
 
-        // 被弾で割り込まれてよい状態か。死亡・デバッグ・初期化の最中は割り込まない
         protected virtual bool IsInterruptible =>
             CurrentState != DieState && CurrentState != DebugState && CurrentState != InitState;
 
@@ -274,15 +257,10 @@ namespace DemoGame
 
             _nextStaggerTime = Time.time + _damage.StaggerCooldown;
 
-            // 怯み中にまた当たったら、怯みを最初からやり直す
             ChangeState(DamageState, reenter: true);
             return true;
         }
 
-        // ---- 状態が使う操作 ----
-
-        // NavMesh は LevelRoot の Awake で焼くので、シーン開始時から居る敵（ボス）は
-        // 焼ける前に Agent が有効化されて NavMesh に乗り損ねている。乗っていなければ乗せ直す
         public bool EnsureOnNavMesh()
         {
             if (!_agent.isActiveAndEnabled) return false;
@@ -343,7 +321,6 @@ namespace DemoGame
             _nextAttackTime = Time.time + _parameters.AttackIntervalTime;
         }
 
-        // 相手が距離と前方の角度（±度）の中にいるか
         public bool IsTargetInReach(float range, float angle)
         {
             if (_target == null) return false;
@@ -357,8 +334,6 @@ namespace DemoGame
             return Vector3.Angle(transform.forward, toTarget) <= angle;
         }
 
-        // 当たり判定を出している間、毎フレーム呼ぶ。相手に当たったらダメージを与えて true を返す
-        // ボーンが見つかっていればボーンの球、なければ足元の扇形で判定する
         public bool TryHitTarget(AttackStateSettings settings)
         {
             if (_target == null) return false;
@@ -447,7 +422,6 @@ namespace DemoGame
             _visual.SetBool(id, value);
         }
 
-        // 倒れたあと、プレイヤーの攻撃や移動の邪魔にならないようにする
         public void DisableBody()
         {
             StopMoving();
@@ -471,17 +445,12 @@ namespace DemoGame
             _attackImpact.Dispose();
         }
 
-        // ---- 開発用の表示（DebugShapes。Scene ビューと Game ビューの両方に出る） ----
-
         private static readonly Color DetectColor = new Color(1f, 0.9f, 0.1f);
         private static readonly Color LoseColor = new Color(1f, 0.45f, 0.1f);
         private static readonly Color AttackRangeColor = new Color(1f, 0.15f, 0.15f);
         private static readonly Color PatrolColor = new Color(0.3f, 0.8f, 1f);
         private const float HitResultDuration = 0.3f;
 
-        // 状態が切り替わる距離を足元に円で、攻撃の当たる範囲を扇形で描く。いま判定に使っているものを濃くする
-        //   円  黄：見つける距離（Search → Pursue） 橙：見失う距離（Pursue → Search） 赤：攻撃を始める距離
-        //   扇形 薄い赤：普段 ／ 橙：振りかぶり中 ／ 当たる瞬間：当たったら赤、外れたら白（相手への線も引く）
         private void DrawDebug()
         {
             if (!_drawDebug || IsDead) return;
@@ -502,9 +471,6 @@ namespace DemoGame
             DrawAttackDebug(ground);
         }
 
-        // 攻撃の当たり判定
-        //   ボーンの球：攻撃中だけ描く。薄い橙：まだ判定を出していない ／ 濃い橙：判定中 ／ 当たったら赤（その位置に 0.3 秒）
-        //   扇形（ボーンが無いとき）：薄い赤：普段 ／ 濃い橙：判定中
         private void DrawAttackDebug(Vector3 ground)
         {
             var attack = AttackState as AttackState;
@@ -544,7 +510,6 @@ namespace DemoGame
         }
 
 #if UNITY_EDITOR
-        // 再生中は、足元に今の状態の名前を出す（Scene ビュー）
         private void OnDrawGizmos()
         {
             if (!_drawDebug || !Application.isPlaying || CurrentState == null) return;
@@ -552,7 +517,6 @@ namespace DemoGame
             UnityEditor.Handles.Label(transform.position + Vector3.up * 0.2f, CurrentState.GetType().Name);
         }
 
-        // 再生していないときに、選んだ敵の範囲を確かめる
         private void OnDrawGizmosSelected()
         {
             if (Application.isPlaying) return;

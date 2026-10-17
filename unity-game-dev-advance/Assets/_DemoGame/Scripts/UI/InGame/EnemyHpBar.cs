@@ -3,9 +3,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // 雑魚敵の頭上の HP バー。World Space の Canvas に付け、Billboard でカメラを向かせる
-    // 中身の横幅（localScale.x）を残り HP の割合にする。中身の Pivot は左端（x = 0）にしておく
-    // 高さはモデルの見た目（Renderer の範囲）のてっぺんに合わせる。モデルを差し替えても頭の上に出る
     public class EnemyHpBar : MonoBehaviour
     {
         [Tooltip("空なら親から探す")]

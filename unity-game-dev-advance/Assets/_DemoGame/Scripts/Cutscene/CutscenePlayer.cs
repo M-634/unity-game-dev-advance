@@ -6,8 +6,6 @@ using UnityEngine.Playables;
 
 namespace DemoGame
 {
-    // 演出（Timeline）を再生して、終わるまで待てるようにする
-    // 再生中はプレイヤーの操作を止め、HUD を隠す。スキップは「最後まで飛ばす」（途中で止めると出したものが残るため）
     public class CutscenePlayer : MonoBehaviour
     {
         [SerializeField]
@@ -34,12 +32,10 @@ namespace DemoGame
             }
         }
 
-        // 演出を再生し、終わるまで（スキップ・キャンセルを含む）待つ
         public async UniTask PlayAsync(PlayableDirector director, bool skippable, CancellationToken token)
         {
             if (director == null) return;
 
-            // 同時には再生しない。前の演出が終わるのを待つ
             await UniTask.WaitWhile(() => _isPlaying, cancellationToken: token);
 
             _isPlaying = true;
@@ -61,7 +57,6 @@ namespace DemoGame
                 director.time = 0;
                 director.Play();
 
-                // Play した直後のフレームはまだ Playing にならないことがあるので、1 フレーム待つ
                 await UniTask.Yield(PlayerLoopTiming.Update, token);
 
                 while (director.state == PlayState.Playing && !skipRequested)
@@ -82,7 +77,6 @@ namespace DemoGame
             }
         }
 
-        // 演出の外でも操作を止めておきたいとき（扉が開くのを見せている間など）に使う。Dispose で戻る
         public IDisposable Lock()
         {
             _lockCount++;
@@ -105,7 +99,6 @@ namespace DemoGame
             RestoreInputAsync(destroyCancellationToken).SuppressCancellationThrow().Forget();
         }
 
-        // スキップに使ったクリックを離してから操作を戻す（同じクリックで攻撃しないように）
         private async UniTask RestoreInputAsync(CancellationToken token)
         {
             if (_input == null) return;

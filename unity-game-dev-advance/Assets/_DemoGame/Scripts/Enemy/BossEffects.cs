@@ -3,9 +3,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // ボスのエフェクト。ボスの状態を見て出すだけで、ボスの動きには関わらない。設計：doc/demo-game/12-vfx.md #14・#15
-    //   攻撃の瞬間（AttackImpact）：前の地面に衝撃波・砂煙・岩の破片
-    //   怒ったら：体の表面から炎のオーラ（形はボスの SkinnedMeshRenderer に合わせる）
     public class BossEffects : MonoBehaviour
     {
         [SerializeField]
@@ -57,7 +54,6 @@ namespace DemoGame
             _aura = Instantiate(_angerAuraPrefab, _boss.transform);
             _aura.transform.localPosition = Vector3.zero;
 
-            // 炎は体の表面から出す（モデルを差し替えても追従するよう、実行時に探す）
             var body = _boss.GetComponentInChildren<SkinnedMeshRenderer>();
             if (body == null) return;
 

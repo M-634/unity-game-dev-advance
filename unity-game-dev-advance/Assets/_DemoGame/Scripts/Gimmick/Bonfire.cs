@@ -4,16 +4,16 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // 篝火。近くで E を押すと、杖を炎へ伸ばして（PlayerStaffReach）火を移す。設計：doc/demo-game/10-level-design.md §4.2・§7
-    //   ステージの篝火：いつも燃えている。杖の光の段は「点けた灯火の数」まで
-    //   ボス戦の篝火  ：いつでもフルチャージ。ボスの地面叩きつけ（WeakenAll）で1段ずつ弱くなり、0 で消える
-    // PlayerInteractor に見つけてもらうため、この GameObject は Layer Interactable にし、コライダー（トリガー）を付けておく
     public class Bonfire : MonoBehaviour, IInteractable
     {
         private static readonly List<Bonfire> Weakenable = new List<Bonfire>();
 
         [SerializeField]
         private GameProgress _progress;
+
+        [Tooltip("オフなら、Reignite() が呼ばれるまで火が入っていない（祭壇の火）")]
+        [SerializeField]
+        private bool _litOnStart = true;
 
         [Header("ボス戦の篝火")]
         [Tooltip("叩きつけで弱くなるか（ボス戦の篝火）")]
@@ -68,12 +68,10 @@ namespace DemoGame
 
         public ReadOnlyReactiveProperty<int> Strength => _strength;
 
-        // 杖に火を移したとき（火が移るエフェクト。doc/demo-game/12-vfx.md #3）
         public Observable<Staff> Refilled => _refilled;
 
         public bool IsBurning => _strength.Value > 0;
 
-        // ボスの地面叩きつけで呼ぶ。部屋の篝火がすべて1段弱くなる
         public static void WeakenAll()
         {
             for (int i = Weakenable.Count - 1; i >= 0; i--)
@@ -102,7 +100,7 @@ namespace DemoGame
             }
 
             _noiseOffset = Random.value * 100f;
-            _strength.Value = _maxStrength;
+            _strength.Value = _litOnStart ? _maxStrength : 0;
             Apply();
         }
 
@@ -128,7 +126,6 @@ namespace DemoGame
             var staff = interactor.GetComponentInParent<Staff>();
             if (staff == null || !staff.IsOwned.CurrentValue) return false;
 
-            // 火が満タンで、もう光らせられないなら出さない（E を押しても何も起きないので）
             return staff.Flame.CurrentValue < Staff.MaxFlame || staff.Glow.CurrentValue < GlowFor(staff);
         }
 
@@ -140,7 +137,6 @@ namespace DemoGame
             Vector3 point = ReachPosition();
             PlayerStaffReach.ReachOrRun(interactor, point, () =>
             {
-                // 腕を伸ばしている間に消えていたら移らない
                 if (IsBurning && staff.Refill(GlowFor(staff)))
                 {
                     FxSpawner.Spawn(_kindleEffect, point);
@@ -169,7 +165,6 @@ namespace DemoGame
             Apply();
         }
 
-        // ボス戦で篝火が出てくるとき（BossBonfireSpawner から）
         public void Reignite()
         {
             _strength.Value = _maxStrength;

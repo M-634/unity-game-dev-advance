@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 namespace DemoGame
 {
-    // 音量の Slider と、その横の数値（0〜100）。
     public class VolumeSlider : MonoBehaviour
     {
         [Tooltip("Min 0・Max 1。キーボード・ゲームパッドでは 0.1 刻みで動く")]

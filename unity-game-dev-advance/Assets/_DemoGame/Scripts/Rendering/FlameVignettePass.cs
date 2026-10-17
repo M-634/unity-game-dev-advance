@@ -5,7 +5,6 @@ using UnityEngine.Rendering.Universal;
 
 namespace DemoGame
 {
-    // 画面の縁の炎の Render Graph パス。作りは OutlinePass と同じ（カメラのカラーを読んで、新しいテクスチャに書いて差し替える）
     public class FlameVignettePass : ScriptableRenderPass
     {
         private static readonly int IntensityId = Shader.PropertyToID("_FlameIntensity");

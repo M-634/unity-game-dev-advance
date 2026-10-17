@@ -45,19 +45,14 @@ namespace DemoGame
 
         public float CurrentSpeed { get; private set; }
 
-        // 箱を押している間など、移動を他のコンポーネントに任せるときに true にする
-        // ロック中は移動・回転・ジャンプをしない（重力だけは掛け続ける）
         public bool IsMovementLocked { get; set; }
 
-        // 火焔玉をチャージしている間など、歩けるが走らせたくないときに true にする
         public bool IsSprintLocked { get; set; }
 
         public Transform VisualRoot => _visualRoot;
 
-        // TPS / FPS。設定するのはカメラ側（CameraModeSwitcher）。プレイヤーはカメラを知らない
         public CameraMode ViewMode { get; set; } = CameraMode.Tps;
 
-        // 着地した瞬間。引数は着地直前の落下速度（m/s、正の値）
         public event Action<float> Landed;
 
         private bool _wasGrounded = true;
@@ -106,13 +101,11 @@ namespace DemoGame
             MoveAndRotate();
         }
 
-        // ロック中に移動を任された側が、アニメーション用の速度を伝える
         public void SetLockedSpeed(float speed)
         {
             CurrentSpeed = speed;
         }
 
-        // 入力をカメラ基準のワールド方向にしたもの（長さ 0〜1）
         public Vector3 GetInputDirection()
         {
             return _input == null ? Vector3.zero : ToWorldDirection(_input.Move);
@@ -134,7 +127,6 @@ namespace DemoGame
 
             if (IsGrounded)
             {
-                // 接地中はわずかに下向きの力をかけ続ける。0 にすると接地判定がちらつく
                 if (_verticalVelocity < 0f)
                 {
                     _verticalVelocity = -2f;
@@ -142,7 +134,6 @@ namespace DemoGame
 
                 if (_jumpRequested)
                 {
-                    // v = sqrt(2 * g * h) から必要な初速を求める
                     _verticalVelocity = Mathf.Sqrt(_jumpHeight * -2f * _gravity);
                 }
             }
@@ -161,7 +152,6 @@ namespace DemoGame
 
             if (ViewMode == CameraMode.Fps)
             {
-                // FPS では体を常にカメラの水平方向へ向ける。横移動しても向きは変えない
                 FaceCameraYaw();
             }
             else if (direction.sqrMagnitude > 0.001f)

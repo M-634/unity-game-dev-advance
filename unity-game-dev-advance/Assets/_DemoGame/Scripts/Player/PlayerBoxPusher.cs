@@ -3,8 +3,6 @@ using UnityEngine.Animations.Rigging;
 
 namespace DemoGame
 {
-    // 箱を押している間のプレイヤー。移動を PlayerController から預かり、箱と一緒に動かす
-    // 両手は Animation Rigging（Two Bone IK）で箱の面に添える。Rig の Weight で FK ⇔ IK を補間する
     public class PlayerBoxPusher : MonoBehaviour
     {
         [SerializeField]
@@ -86,7 +84,6 @@ namespace DemoGame
             _box.GetPushFace(transform.position, out var faceCenter, out var normal, out _);
             _pushDirection = -normal;
 
-            // 面の正面に立たせ、面の方を向かせる
             Vector3 standPosition = faceCenter + normal * (_characterController.radius + _standOffset);
             standPosition.y = transform.position.y;
             Teleport(standPosition);
@@ -141,15 +138,12 @@ namespace DemoGame
             {
                 moved = _box.Move(_pushDirection, _pushSpeed * along * Time.deltaTime);
 
-                // 箱を動かした結果を物理側へ反映してから、プレイヤーを動かす（古い位置の箱にぶつからないように）
                 Physics.SyncTransforms();
             }
 
-            // 接地判定を保つため、わずかに下向きにも動かす
             _characterController.Move(_pushDirection * moved + Vector3.down * (2f * Time.deltaTime));
             _controller.SetLockedSpeed(moved / Mathf.Max(Time.deltaTime, 1e-5f));
 
-            // Rig はアニメーションの評価中に解かれるので、ターゲットは Update のうちに置く
             PlaceHandTargets();
         }
 
@@ -178,7 +172,6 @@ namespace DemoGame
 
         private void Teleport(Vector3 position)
         {
-            // CharacterController は有効なまま位置を書き換えると戻されるので、いったん止める
             _characterController.enabled = false;
             transform.position = position;
             _characterController.enabled = true;

@@ -2,7 +2,6 @@ using System;
 
 namespace DemoGame
 {
-    // 解像度の値。Unity の Resolution はリフレッシュレートまで持つので、幅と高さだけの型にする。
     public readonly struct ScreenResolution : IEquatable<ScreenResolution>
     {
         public static readonly ScreenResolution Native = new(0, 0);

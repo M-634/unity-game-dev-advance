@@ -6,9 +6,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // SettingsModel と SettingsView を双方向につなぐ。
-    // View → Model は「値を変えて」と頼むだけ。Model → View は変わった値を出すだけ。
-    // タイトルからもポーズからも Open() で開き、閉じたら保存して Closed を流す。
     public class SettingsPresenter : MonoBehaviour
     {
         private static readonly string[] ScreenModeLabels = { "Fullscreen", "Windowed" };
@@ -45,7 +42,6 @@ namespace DemoGame
             Bind();
         }
 
-        // 他の Presenter の Start から先に Open() が呼ばれても動くように、最初に使われたときにつなぐ
         private bool Bind()
         {
             if (_isBound) return true;
@@ -90,7 +86,6 @@ namespace DemoGame
                 _model.FrameRateLimit.Select(fps => IndexOf(SettingsModel.FrameRateChoices, fps)),
                 i => _model.SetFrameRateLimit(SettingsModel.FrameRateChoices[i]));
 
-            // VSync が On のあいだはフレームレートの上限が効かないので、選べなくする
             _model.VSync
                 .Subscribe(on => _view.FrameRate.SetInteractable(!on))
                 .AddTo(_disposables);
@@ -123,7 +118,6 @@ namespace DemoGame
             slider.ValueChanged.Subscribe(onChanged).AddTo(_disposables);
         }
 
-        // 幅×高さで重複を除き、小さい順に並べる
         private static List<ScreenResolution> CollectResolutions()
         {
             List<ScreenResolution> list = Screen.resolutions
@@ -142,7 +136,6 @@ namespace DemoGame
             return list;
         }
 
-        // 未設定（画面の解像度）や、このモニターに無い解像度は一番大きいものとして見せる
         private int IndexOfResolution(ScreenResolution resolution)
         {
             int index = _resolutions.IndexOf(resolution);

@@ -29,7 +29,6 @@ namespace DemoGame
 
         public override void OnBehaviourPause(Playable playable, FrameData info)
         {
-            // クリップを通り過ぎたら、最後の値にしておく（フレームの刻みで途中の値が残らないように）
             if (playable.GetTime() >= playable.GetDuration())
             {
                 Set(To);
@@ -38,13 +37,11 @@ namespace DemoGame
 
         private void Set(float value)
         {
-            // 編集中のプレビューでマテリアルを複製すると、シーンに残ってしまう。再生中だけ書く
             if (!Application.isPlaying || _renderers == null) return;
 
             SetDissolve(_renderers, value);
         }
 
-        // 演出の外から値を決めたいとき（隠しておく・最後の状態にそろえる）にも使う
         public static void SetDissolve(Renderer[] renderers, float value)
         {
             foreach (var renderer in renderers)

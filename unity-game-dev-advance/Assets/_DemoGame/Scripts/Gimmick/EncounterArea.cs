@@ -4,8 +4,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // 敵を出して、全滅したことを知らせる場所。
-    // 誰が始めるか、終わったあと何が起きるかは知らない。
     public class EncounterArea : MonoBehaviour
     {
         [SerializeField]
@@ -53,7 +51,6 @@ namespace DemoGame
                 FxSpawner.Spawn(_spawnEffect, point.position);
                 var enemy = Instantiate(_enemyPrefab, point.position, point.rotation);
 
-                // テンプレートをシーンに非アクティブで置いている場合があるので、必ず起こす
                 enemy.SetActive(true);
 
                 if (!enemy.TryGetComponent(out EnemyController controller))

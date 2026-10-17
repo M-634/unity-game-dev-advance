@@ -3,8 +3,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // 灯は「自分が点いた」としか言わない。
-    // 何をしたら点くかは XxxLanternTrigger が持ち、点いたあと何が起きるかは受け取った側が決める
     public class Lantern : MonoBehaviour
     {
         private static readonly int EmissionColorId = Shader.PropertyToID("_EmissionColor");
@@ -50,7 +48,6 @@ namespace DemoGame
         public Observable<Unit> LitUp => _litUp;
         public bool IsLit { get; private set; }
 
-        // 火はついたが、まだ点いていない（灯火 2 で敵が出ている間）
         public bool IsKindled { get; private set; }
 
         private Material _material;
@@ -87,7 +84,6 @@ namespace DemoGame
                 _pillar.SetActive(false);
             }
 
-            // 炎は灯の見た目の中心に付けておき、点くまで隠す
             if (_fireEffectPrefab != null)
             {
                 _fireEffect = FxSpawner.Attach(_fireEffectPrefab, transform);
@@ -100,7 +96,6 @@ namespace DemoGame
             }
         }
 
-        // 火だけつける。LitCount は増やさない。LightUp() で本当に点く
         public void Kindle()
         {
             if (IsLit || IsKindled) return;
@@ -156,7 +151,6 @@ namespace DemoGame
             }
         }
 
-        // 炎の大きさ（火だけ：小さく ／ 点いた：そのまま）
         private void SetFireVisible(float scale)
         {
             if (_fireEffect == null) return;

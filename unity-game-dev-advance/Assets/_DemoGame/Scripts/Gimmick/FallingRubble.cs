@@ -2,8 +2,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // 蔦で吊られた瓦礫。蔦が燃え尽きると落ち、落ちている間に当たった相手（ボス）にダメージ。設計：doc/demo-game/10-level-design.md §7
-    // Rigidbody は最初 Kinematic（吊られている）。Drop() で重力を受ける
     [RequireComponent(typeof(Rigidbody))]
     public class FallingRubble : MonoBehaviour
     {
@@ -68,7 +66,6 @@ namespace DemoGame
             var target = collision.collider.GetComponentInParent<IDamageable>();
             if (target == null || target.IsDead) return;
 
-            // プレイヤーには当てない（ボスを誘い込む仕掛け）
             if (collision.collider.transform.root.CompareTag("Player")) return;
 
             _hasHit = true;

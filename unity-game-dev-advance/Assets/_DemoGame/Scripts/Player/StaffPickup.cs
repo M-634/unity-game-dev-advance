@@ -2,8 +2,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // 導入演出で拾う杖（地面に置いてある方）。設計：doc/demo-game/10-level-design.md §4.1
-    // 導入演出（InGameIntro）が終わったら（スキップでも）PickUp() が呼ばれ、地面の杖が消えてプレイヤーが杖を持つ
     public class StaffPickup : MonoBehaviour
     {
         [SerializeField]

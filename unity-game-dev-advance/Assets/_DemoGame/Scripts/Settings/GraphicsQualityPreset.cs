@@ -1,6 +1,5 @@
 namespace DemoGame
 {
-    // 画質 4 段で URP アセットに入れる値。High は PC_RPAsset の元の値と同じ。
     public readonly struct GraphicsQualityPreset
     {
         public readonly float RenderScale;

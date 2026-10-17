@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // persistentDataPath に JSON で保存する。ファイルが無い・壊れているときは既定値を返す。
     public sealed class JsonSettingsRepository : ISettingsRepository
     {
         private const string FileName = "settings.json";

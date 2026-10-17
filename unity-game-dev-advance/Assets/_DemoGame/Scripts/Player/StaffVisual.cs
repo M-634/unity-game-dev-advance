@@ -2,9 +2,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // 杖の見た目。杖の Prefab（WeaponSocket の下）のルートに付ける
-    // 状態（火の量・光の段・チャージ）は Staff / PlayerAttack から渡される。ここは見せ方だけを持つ
-    // 炎のエフェクト（doc/demo-game/12-vfx.md #2）ができるまでは、先端の球の発光と Point Light で見せる
     public class StaffVisual : MonoBehaviour
     {
         private static readonly int EmissionColorId = Shader.PropertyToID("_EmissionColor");
@@ -92,7 +89,6 @@ namespace DemoGame
         {
             if (_tipRenderer != null)
             {
-                // 杖は1本だけなので複製してよい（SRP Batcher のバッチは分かれるが1つだけ）
                 _tipMaterial = _tipRenderer.material;
             }
 
@@ -117,10 +113,8 @@ namespace DemoGame
             Apply();
         }
 
-        // チャージ中の段。-1 はチャージしていない
         public void SetCharge(int level)
         {
-            // 段が上がった瞬間（1段目から）にリングを出す
             if (level > _charge && level >= 1 && _chargeLevelUpEffect != null && _muzzle != null)
             {
                 FxSpawner.Spawn(_chargeLevelUpEffect, _muzzle.position, _muzzle.rotation, 0.6f + 0.3f * level, _muzzle);
@@ -144,7 +138,6 @@ namespace DemoGame
 
         private void ApplyParticles(bool isLit, int charge)
         {
-            // 炎：火の量で数、光の段で大きさ。消えていたら出さない
             float rateScale = isLit ? Mathf.Lerp(0.4f, 1f, _flame01) * (1f + 0.35f * _glow) : 0f;
             float sizeScale = 1f + 0.25f * _glow + 0.2f * charge;
             for (int i = 0; i < _flameSystems.Length; i++)
@@ -155,7 +148,6 @@ namespace DemoGame
                 main.startSizeMultiplier = _flameSizes[i] * sizeScale;
             }
 
-            // チャージ：1段以上で、段が上がるほど多く
             for (int i = 0; i < _chargeSystems.Length; i++)
             {
                 var emission = _chargeSystems[i].emission;

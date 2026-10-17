@@ -4,8 +4,6 @@ using UnityEngine.Rendering.Universal;
 
 namespace DemoGame
 {
-    // 画面全体の輪郭線を描く。PC_Renderer に1つだけ足す
-    // 線の設定は Volume（OutlineVolume）から読む。Volume が無い・Intensity が 0 なら何もしない
     public class OutlineRendererFeature : ScriptableRendererFeature
     {
         [SerializeField]

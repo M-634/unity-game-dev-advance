@@ -5,9 +5,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // 次のエリアへの道をふさぐ物。点けた灯火が指定の数になったら開く。設計：doc/demo-game/10-level-design.md §3.2
-    //   _door あり：扉を開ける
-    //   _door なし：ふさいでいる物（_blocker）を溶かして消す（倒木・岩・魔法の壁など。見た目はステージ制作で決める）
     public class AreaGate : MonoBehaviour
     {
         [SerializeField]
@@ -65,7 +62,6 @@ namespace DemoGame
 
             if (_blocker == null) return;
 
-            // 溶け始めたら、もう通れるようにする
             foreach (var col in _blocker.GetComponentsInChildren<Collider>())
             {
                 col.enabled = false;

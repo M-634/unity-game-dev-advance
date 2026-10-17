@@ -2,7 +2,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // プレイヤーの攻撃が当たったら、当たった位置にダメージ数を出す
     public class DamageNumberSpawner : MonoBehaviour
     {
         [SerializeField]

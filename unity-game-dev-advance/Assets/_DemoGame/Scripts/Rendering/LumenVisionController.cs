@@ -4,10 +4,6 @@ using UnityEngine.Rendering;
 
 namespace DemoGame
 {
-    // 視界の明るさ（Lumen）とチャージを、Volume の重みで見せる。設計：doc/demo-game/11-lighting.md §5.2・§5.3
-    //   Volume_VisionDark  ：Weight = 1 − Lumen / 100（暗いほど強くかかる）
-    //   Volume_ChargeFlame ：Weight = チャージの段 / 3（画面の縁の炎）
-    // Volume の中身はスクリプトで書き換えない。重みだけを変える（プロファイルは共有アセットのまま）
     public class LumenVisionController : MonoBehaviour
     {
         [SerializeField]

@@ -3,9 +3,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // 床スイッチ。プレイヤーか箱（PressBox）が乗っている間だけ押されている
-    // 乗った瞬間に Pressed、全部降りた瞬間に Released を流す。設計：doc/demo-game/10-level-design.md §4.4
-    // この GameObject のコライダーはトリガーにしておく
     public class PressurePlate : SwitchBase
     {
         [Tooltip("沈ませる見た目。未設定なら沈まない")]
@@ -21,7 +18,6 @@ namespace DemoGame
 
         private Vector3 _visualDefaultPosition;
 
-        // 乗っている物（プレイヤーのルート・箱）。同じ物の複数のコライダーを1つに数える
         private readonly Dictionary<Transform, int> _inside = new Dictionary<Transform, int>();
 
         private void Awake()
@@ -67,7 +63,6 @@ namespace DemoGame
 
         private void Update()
         {
-            // 乗っていた物が消えた・無効になったときは、トリガーから出たことにならないので自分で外す
             if (_inside.Count == 0) return;
 
             bool removed = false;

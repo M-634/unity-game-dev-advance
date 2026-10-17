@@ -5,11 +5,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // 火焔玉で燃える蔦。燃え尽きたら消えて、Burnt を流す。設計：doc/demo-game/10-level-design.md §4.4（灯火 3）・§7（ボス戦）
-    //   道をふさぐ蔦：燃え尽きたら通れる
-    //   瓦礫を吊る蔦：燃え尽きたら FallingRubble が落ちる
-    // 燃やし方は2つ：火焔玉を当てる ／ 杖が灯っている状態で近くで E（杖を伸ばして火をつける。PlayerStaffReach）
-    // 火焔玉に当たるよう、トリガーではないコライダーを付けておく。E で燃やせるようにするなら Layer Interactable にする
     public class BurnableVine : MonoBehaviour, IFlammable, IInteractable
     {
         private static readonly int EmissionColorId = Shader.PropertyToID("_EmissionColor");
@@ -64,7 +59,6 @@ namespace DemoGame
         {
             if (!CanInteract(interactor)) return;
 
-            // 杖を伸ばす先は、蔦の表面のうち手（胸の高さ）にいちばん近い所
             Vector3 hand = interactor.transform.position + Vector3.up * 1.2f;
             var col = GetComponentInChildren<Collider>();
             Vector3 point = col != null ? col.ClosestPoint(hand) : transform.position;
@@ -80,7 +74,6 @@ namespace DemoGame
             BurnAsync(destroyCancellationToken).SuppressCancellationThrow().Forget();
         }
 
-        // 燃える（エフェクト：doc/demo-game/12-vfx.md #18）→ 溶けて消える
         private async UniTask BurnAsync(CancellationToken ct)
         {
             var renderers = GetComponentsInChildren<MeshRenderer>();
@@ -95,11 +88,9 @@ namespace DemoGame
                 await UniTask.Yield(PlayerLoopTiming.Update, ct);
             }
 
-            // 燃え尽きた時点で、通れる・落ちる
             FxSpawner.Stop(_burnEffect);
             if (_burnEffect != null)
             {
-                // 残った火の粉が消えたら片づける（蔦より先に消えないよう、蔦の子にはしていない）
                 Destroy(_burnEffect, 3f);
             }
 
@@ -134,10 +125,8 @@ namespace DemoGame
         {
             if (_burnEffectPrefab == null) return;
 
-            // 形はワールド座標のメッシュで決まるので、蔦の子にしない（蔦の拡縮が炎の大きさに乗らないように）
             _burnEffect = Instantiate(_burnEffectPrefab, transform.position, Quaternion.identity);
 
-            // 炎は蔦の表面から出す。子のパーティクルも同じ形に
             if (meshRenderer != null)
             {
                 foreach (var ps in _burnEffect.GetComponentsInChildren<ParticleSystem>(true))

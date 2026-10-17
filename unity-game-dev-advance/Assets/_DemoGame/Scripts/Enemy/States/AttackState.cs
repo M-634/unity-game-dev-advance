@@ -2,8 +2,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // 振りかぶり → 当たり判定を出す時間帯 → 戻り。Animation Event は使わず、時間で区切る
-    // 判定はボーン（手・頭など）に付いた球なので、位置はモーションに追従する。合わせるのは時間帯だけ
     public sealed class AttackState : IState
     {
         private readonly EnemyController _owner;
@@ -19,7 +17,6 @@ namespace DemoGame
             _settings = settings;
         }
 
-        // 判定を出している最中か（開発用の表示に使う）
         public bool IsHitActive => !_hasHit && _elapsed >= _settings.HitStartTime && _elapsed <= _settings.HitEndTime;
 
         public void OnEnter()
@@ -37,7 +34,6 @@ namespace DemoGame
         {
             _elapsed += Time.deltaTime;
 
-            // 判定を出すまでは相手の方へ向き直す。出し始めたら向きを固定する（避けられるように）
             if (_elapsed < _settings.HitStartTime)
             {
                 _owner.FaceTarget();

@@ -3,10 +3,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // 杖の状態。設計：doc/demo-game/10-level-design.md §4.1
-    //   火の量（Flame 0〜100）：火焔玉を撃つと減る。0 なら杖は消えている
-    //   光の段（Glow 0〜3）  ：篝火で「点けた灯火の数」まで上がる。チャージできる上限。撃つと使った段だけ下がる
-    // どちらも時間では減らない。見た目（StaffVisual）と明るさ（PlayerLumen）は、これを購読する側が決める
     public class Staff : MonoBehaviour
     {
         public const float MaxFlame = 100f;
@@ -38,10 +34,8 @@ namespace DemoGame
 
         public bool IsLit => _isOwned.Value && _flame.Value > 0f;
 
-        // 篝火で光らせられる段。点けた灯火の数
         public int MaxGlow => _progress != null ? Mathf.Clamp(_progress.LitCount.CurrentValue, 0, MaxGlowLevel) : 0;
 
-        // 火焔玉を出す位置。見た目が無ければ自分の位置
         public Transform Muzzle => _visual != null && _visual.Muzzle != null ? _visual.Muzzle : transform;
 
         public StaffVisual Visual => _visual;
@@ -75,13 +69,11 @@ namespace DemoGame
                 .AddTo(_disposables);
         }
 
-        // 導入演出で拾ったとき
         public void Acquire()
         {
             _isOwned.Value = true;
         }
 
-        // 篝火で火を移す。火を満タンにし、光の段を glow まで上げる（下げない）。何か変わったら true
         public bool Refill(int glow)
         {
             if (!_isOwned.Value) return false;
@@ -94,7 +86,6 @@ namespace DemoGame
             return changed;
         }
 
-        // 火焔玉を撃つときに呼ぶ。火が足りなければ残りを使い切る（撃てなくはしない）
         public void Use(float flameCost, int glowCost)
         {
             if (!IsLit) return;
@@ -102,7 +93,6 @@ namespace DemoGame
             _flame.Value = Mathf.Max(0f, _flame.Value - flameCost);
             _glow.Value = Mathf.Max(0, _glow.Value - glowCost);
 
-            // 火が消えたら光も消える
             if (_flame.Value <= 0f)
             {
                 _glow.Value = 0;

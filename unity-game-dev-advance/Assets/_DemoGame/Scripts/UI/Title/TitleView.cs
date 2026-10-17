@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 namespace DemoGame
 {
-    // ボタンが押されたことを流すだけ。押されたら何が起きるかは知らない。
     public class TitleView : MonoBehaviour
     {
         [Tooltip("タイトル画面全体。表示・非表示と操作の可否を切り替える")]
@@ -30,7 +29,6 @@ namespace DemoGame
         public Observable<Unit> SettingsClicked => _settingsClicked;
         public Observable<Unit> QuitClicked => _quitClicked;
 
-        // 表示して、前に選んでいたボタン（初回は START）を選び直す
         public void Show()
         {
             SetShown(true);
@@ -51,7 +49,6 @@ namespace DemoGame
             SetShown(false);
         }
 
-        // 開始・終了を受け付けたあと、ボタンを押せなくする（見た目はそのまま）
         public void SetInteractable(bool interactable)
         {
             if (_canvasGroup != null) _canvasGroup.interactable = interactable;

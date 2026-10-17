@@ -3,8 +3,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // 近くの IInteractable を選び、E キーで働きかける
-    // トリガーの出入りは使わず、一定間隔で探し直す（取りこぼしで「選ばれたまま」にならないように）
     public class PlayerInteractor : MonoBehaviour
     {
         [SerializeField]
@@ -31,7 +29,6 @@ namespace DemoGame
         private readonly Collider[] _buffer = new Collider[16];
         private float _nextScanTime;
 
-        // 箱を押している間など、選んでいる対象を固定したいときに使う
         private IInteractable _held;
 
         public ReadOnlyReactiveProperty<IInteractable> Current => _current;
@@ -112,14 +109,12 @@ namespace DemoGame
         {
             var target = _current.Value;
 
-            // 破棄された対象（UnityEngine.Object の == null）を弾く
             if (target == null || (target is Object unityObject && unityObject == null)) return;
             if (!target.CanInteract(this)) return;
 
             target.Interact(this);
             _nextScanTime = 0f;
 
-            // 対象は同じでも文言が変わることがある（押す → 離す）ので、HUD に知らせ直す
             _current.ForceNotify();
         }
 

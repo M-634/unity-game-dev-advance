@@ -8,8 +8,6 @@ using UnityEngine.Timeline;
 
 namespace DemoGame
 {
-    // 灯が点くたびに、対応する紋様が消える演出を見せる
-    // 同じ Timeline を使い回し、Dissolve Track の Binding だけを紋様ごとに差し替える
     public class BossSealDirector : MonoBehaviour
     {
         private static readonly int DissolveId = Shader.PropertyToID("_Dissolve");
@@ -52,7 +50,6 @@ namespace DemoGame
         {
             bool isLast = _seal.IsLastRemaining(emblem);
 
-            // 最後の紋様は、扉が開ききるまで操作を止めたままにする
             using var scope = isLast && _cutscenePlayer != null ? _cutscenePlayer.Lock() : null;
 
             if (_cutscenePlayer != null && _director != null)
@@ -61,13 +58,11 @@ namespace DemoGame
                 await _cutscenePlayer.PlayAsync(_director, skippable: false, token);
             }
 
-            // 途中の値で止まらないよう、消しきった状態にしてから隠す
             HideEmblem(emblem.Renderer);
             _seal.MarkBroken(emblem);
 
             if (!isLast || _door == null) return;
 
-            // 演出のカメラを残したまま、扉が開くところを見せる
             if (_holdCamera != null) _holdCamera.Priority = _holdPriority;
 
             try

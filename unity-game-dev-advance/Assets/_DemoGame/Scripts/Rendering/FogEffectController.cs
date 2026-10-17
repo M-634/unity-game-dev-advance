@@ -4,9 +4,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // 霧のエフェクト（地面を這う霧・ステージ全体の黒い霧）。点けた灯火の数で薄くする。設計：doc/demo-game/12-vfx.md #22・#23
-    //   地面の霧：_groundFogPoints の位置に FX_GroundFog を出す（置き場所はステージに合わせて Transform を動かす）
-    //   黒い霧  ：カメラについていく（Simulation Space が World なので、出た霧はその場に残る）
     public class FogEffectController : MonoBehaviour
     {
         [SerializeField]

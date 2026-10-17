@@ -3,8 +3,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // プレイヤーのロジック（移動・攻撃・HP）の状態を、見た目の Animator へ伝える
-    // ロジック側はこのクラスの存在を知らない
     public class PlayerAnimation : MonoBehaviour
     {
         [SerializeField]
@@ -18,6 +16,13 @@ namespace DemoGame
 
         [SerializeField]
         private PlayerHealth _health;
+
+        [Header("被弾の点滅")]
+        [SerializeField]
+        private Color _hitFlashColor = new Color(1f, 0.25f, 0.2f);
+
+        [SerializeField, Range(0.01f, 1f)]
+        private float _hitFlashDuration = 0.15f;
 
         private readonly CompositeDisposable _disposables = new CompositeDisposable();
         private int _lastHp;
@@ -78,13 +83,22 @@ namespace DemoGame
         {
             if (_visual != null)
             {
-                // 回復（リスポーン）でも HP は変わるので、減ったときだけ被弾とみなす
+                if (hp < _lastHp)
+                {
+                    _visual.Flash(_hitFlashColor, _hitFlashDuration);
+                }
+
                 if (hp < _lastHp && hp > 0)
                 {
                     _visual.SetTrigger(CharacterAnimatorParams.Hit);
                 }
 
                 _visual.SetBool(CharacterAnimatorParams.IsDead, hp <= 0);
+
+                if (_lastHp <= 0 && hp > 0)
+                {
+                    _visual.PlayState(CharacterAnimatorParams.LocomotionState);
+                }
             }
 
             _lastHp = hp;

@@ -4,8 +4,6 @@ using UnityEngine.Rendering.Universal;
 
 namespace DemoGame
 {
-    // 画面の縁の炎を描く。PC_Renderer に1つだけ足す。設計：doc/demo-game/11-lighting.md §5.3
-    // 設定は Volume（FlameVignetteVolume）から読む。Intensity が 0（＝チャージしていない）なら何もしない
     public class FlameVignetteRendererFeature : ScriptableRendererFeature
     {
         [SerializeField]
@@ -42,7 +40,6 @@ namespace DemoGame
         {
             if (_pass == null) return;
 
-            // ゲームのカメラだけ（Scene ビューには出さない）
             if (renderingData.cameraData.cameraType != CameraType.Game) return;
 
             var volume = VolumeManager.instance.stack.GetComponent<FlameVignetteVolume>();

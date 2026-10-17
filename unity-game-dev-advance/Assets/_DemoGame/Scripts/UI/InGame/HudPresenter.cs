@@ -3,8 +3,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // ゲームの状態を購読して、View に渡す。
-    // View はゲームのことを知らず、ゲーム側は View のことを知らない。
     public class HudPresenter : MonoBehaviour
     {
         [SerializeField]

@@ -1,6 +1,5 @@
 namespace DemoGame
 {
-    // 開発用。棒立ちになり、どんな攻撃でも一撃で倒れる
     public sealed class DebugState : IState
     {
         private readonly EnemyController _owner;

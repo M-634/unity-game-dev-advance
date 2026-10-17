@@ -5,10 +5,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // ボス戦の篝火を出す・弱くする。設計：doc/demo-game/10-level-design.md §7
-    //   ボスが動き出したら・怒ったら：床から篝火が出てくる（消えていた物も点き直す）
-    //   ボスの攻撃が当たる瞬間（地面叩きつけ）：部屋の篝火がすべて1段弱くなる（3回で消える）
-    //   全部消えたら、しばらくして出てくる
     public class BossBonfireSpawner : MonoBehaviour
     {
         [SerializeField]
@@ -105,7 +101,6 @@ namespace DemoGame
             }
         }
 
-        // 床の下からせり上がって、点く（エフェクト：doc/demo-game/12-vfx.md #20）
         private async UniTask RaiseAsync(Bonfire bonfire, Vector3 raised, CancellationToken ct)
         {
             var t = bonfire.transform;

@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // 点灯条件：指定した EncounterArea の敵が全滅した
     public class EncounterLanternTrigger : MonoBehaviour
     {
         [SerializeField]
@@ -27,7 +26,6 @@ namespace DemoGame
                 return;
             }
 
-            // Cleared は一度流れたら終わる。購読より先に全滅していたら、ここで点ける
             if (_encounter.IsCleared)
             {
                 _lantern.LightUp();

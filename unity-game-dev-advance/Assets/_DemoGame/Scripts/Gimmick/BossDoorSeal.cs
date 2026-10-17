@@ -4,8 +4,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // ボス扉の封印。紋様と、それに対応する灯を持つ
-    // 灯が点いたら「この紋様が消える」と知らせ、全部消えたら Broken を流す。消す見せ方（演出）は BossSealDirector が持つ
     public class BossDoorSeal : MonoBehaviour
     {
         [Serializable]
@@ -28,10 +26,8 @@ namespace DemoGame
         private readonly Subject<Unit> _broken = new();
         private readonly CompositeDisposable _disposables = new();
 
-        // 灯が点いて、この紋様を消してほしい
         public Observable<Emblem> BreakRequested => _breakRequested;
 
-        // 紋様が全部消えた
         public Observable<Unit> Broken => _broken;
 
         public bool IsBroken { get; private set; }
@@ -47,7 +43,6 @@ namespace DemoGame
             }
         }
 
-        // 演出側が「消し終わった」と伝える
         public void MarkBroken(Emblem emblem)
         {
             if (emblem == null || emblem.IsBroken) return;

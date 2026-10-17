@@ -5,7 +5,6 @@ using UnityEngine.Timeline;
 
 namespace DemoGame
 {
-    // クリップの間に _Dissolve を from → to へ動かす（Ease In Out）。長さはクリップの長さで決まる
     [Serializable]
     public class DissolveClip : PlayableAsset, ITimelineClipAsset
     {

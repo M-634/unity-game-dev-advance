@@ -2,7 +2,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // ボス。その場で構えて、一定時間ダメージを受けない
     public sealed class InvincibleState : IState
     {
         private readonly BossController _owner;

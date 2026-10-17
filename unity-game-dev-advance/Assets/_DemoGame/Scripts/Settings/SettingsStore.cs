@@ -2,8 +2,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // ゲーム中に1つだけの設定を持つ場所。シーンをまたいでも同じ SettingsModel を使う。
-    // 初めて使われたときにファイルから読み込み、グラフィックの反映を始める。
     public static class SettingsStore
     {
         private static ISettingsRepository _repository;
@@ -36,7 +34,6 @@ namespace DemoGame
             Application.quitting += Shutdown;
         }
 
-        // Editor では再生の終わりに呼ばれる。URP アセットなどを元の値に戻す
         private static void Shutdown()
         {
             Application.quitting -= Shutdown;
@@ -48,7 +45,12 @@ namespace DemoGame
             _repository = null;
         }
 
-        // Domain Reload を切っていても、再生のたびに読み込み直す
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        private static void ApplyOnBoot()
+        {
+            EnsureInitialized();
+        }
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void ResetStatics()
         {

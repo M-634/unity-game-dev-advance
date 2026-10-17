@@ -3,8 +3,6 @@ using UnityEngine.Rendering;
 
 namespace DemoGame
 {
-    // FPS の間、体（Visual の下の Renderer すべて）を影だけにする
-    // モデルを差し替えても、子の Renderer を集め直すだけで動く
     public class FirstPersonBodyHider : MonoBehaviour
     {
         [SerializeField]

@@ -2,7 +2,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // 倒れて、溶けて消える。消えたら GameObject を破棄する
     public sealed class DieState : IState
     {
         private readonly EnemyController _owner;
@@ -36,7 +35,6 @@ namespace DemoGame
 
             if (t <= 0f) return;
 
-            // 溶け始めた瞬間に、灰と火の粉を出す（doc/demo-game/12-vfx.md #12）
             if (!_hasSpawnedEffect)
             {
                 _hasSpawnedEffect = true;

@@ -5,7 +5,6 @@ using UnityEngine.Timeline;
 
 namespace DemoGame
 {
-    // ボス戦前の演出。ボスは部屋に入るまで隠しておき、演出の中で姿を現す。演出が終わったら（スキップでも）そのまま戦闘に入る
     public class BossIntroDirector : MonoBehaviour
     {
         [SerializeField]
@@ -53,7 +52,6 @@ namespace DemoGame
                 if (canceled) return;
             }
 
-            // 現れる前にスキップしても、必ず見える状態で戦闘に入る
             DissolveBehaviour.SetDissolve(_bossRenderers, 0f);
 
             if (_boss != null)
@@ -62,7 +60,6 @@ namespace DemoGame
             }
         }
 
-        // ボスのモデル（入れ子の Prefab）は再生直前に Binding を差す。モデルを替えても追従する
         private void BindBoss()
         {
             if (_boss == null || !(_director.playableAsset is TimelineAsset timeline)) return;

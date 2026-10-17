@@ -9,8 +9,6 @@ namespace DemoGame
         Settings,
     }
 
-    // 画面の都合を持たない、タイトル画面の状態そのもの。
-    // 開始か終了を受け付けたら、そのあとの操作は受け付けない。
     public sealed class TitleModel : IDisposable
     {
         private readonly ReactiveProperty<TitleScreen> _screen = new(TitleScreen.Menu);

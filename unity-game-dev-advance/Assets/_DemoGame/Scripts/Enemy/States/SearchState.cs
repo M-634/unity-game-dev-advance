@@ -3,7 +3,6 @@ using UnityEngine.AI;
 
 namespace DemoGame
 {
-    // 周回ルートを歩いてプレイヤーを探す。ルートが無ければ出現位置のまわりをランダムに回る
     public sealed class SearchState : IState
     {
         private readonly EnemyController _owner;

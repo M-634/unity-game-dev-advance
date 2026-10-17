@@ -1,10 +1,10 @@
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Playables;
 
 namespace DemoGame
 {
-    // InGame に入った直後の導入演出。終わったら（スキップでも）経過時間を数え始める
     public class InGameIntro : MonoBehaviour
     {
         [SerializeField]
@@ -19,6 +19,19 @@ namespace DemoGame
         [Tooltip("導入演出で拾う杖。演出が終わったら拾ったことにする")]
         [SerializeField]
         private StaffPickup _staffPickup;
+
+        [Header("祭壇の火")]
+        [Tooltip("導入演出のあとに火が上がる篝火")]
+        [SerializeField]
+        private Bonfire _altar;
+
+        [Tooltip("祭壇を映すカメラの流れ。無ければその場で火が上がるだけ")]
+        [SerializeField]
+        private CameraShowcase _altarShowcase;
+
+        [Tooltip("祭壇のカメラに切り替えてから火が上がるまでの時間（秒）")]
+        [SerializeField, Range(0f, 5f)]
+        private float _igniteDelay = 1.2f;
 
         private void Start()
         {
@@ -40,10 +53,29 @@ namespace DemoGame
                 _staffPickup.PickUp();
             }
 
+            bool igniteCanceled = await IgniteAltarAsync(token).SuppressCancellationThrow();
+            if (igniteCanceled) return;
+
             if (_inGameController != null)
             {
                 _inGameController.BeginTimer();
             }
+        }
+
+        private async UniTask IgniteAltarAsync(CancellationToken token)
+        {
+            if (_altar == null) return;
+
+            if (_altarShowcase != null)
+            {
+                UniTask showcase = _altarShowcase.PlayAsync(token);
+                await UniTask.WhenAny(showcase, UniTask.Delay((int)(_igniteDelay * 1000f), cancellationToken: token));
+                _altar.Reignite();
+                await showcase;
+                return;
+            }
+
+            _altar.Reignite();
         }
     }
 }

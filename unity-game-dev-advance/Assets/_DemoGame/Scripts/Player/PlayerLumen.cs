@@ -3,9 +3,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // 視界の明るさ（0〜100）。設計：doc/demo-game/10-level-design.md §6
-    //   Lumen = 灯火の分（点けた数で 20 / 35 / 50 / 65）＋ 杖の火の分（0〜20）＋ 杖の光の分（光の段 × 5）
-    // 値を出すだけで、Volume もライトも知らない（見せ方は購読する側。doc/demo-game/11-lighting.md §5.2）
     public class PlayerLumen : MonoBehaviour
     {
         public const float MaxLumen = 100f;
@@ -37,7 +34,6 @@ namespace DemoGame
 
         public ReadOnlyReactiveProperty<float> Lumen => _lumen;
 
-        // 0〜1 にしたもの
         public float Normalized => _lumen.Value / MaxLumen;
 
         private void Awake()
@@ -60,7 +56,6 @@ namespace DemoGame
             float target = CalculateTarget();
             float value = Mathf.SmoothDamp(_lumen.Value, target, ref _velocity, _smoothTime);
 
-            // 細かい揺れで購読側を毎フレーム起こさない
             if (Mathf.Abs(value - _lumen.Value) > 0.01f)
             {
                 _lumen.Value = value;

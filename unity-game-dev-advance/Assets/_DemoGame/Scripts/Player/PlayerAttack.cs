@@ -6,15 +6,12 @@ using UnityEngine.Pool;
 
 namespace DemoGame
 {
-    // 攻撃が当たったときの情報。ダメージ数の表示などに使う
     public readonly struct AttackHit
     {
         public readonly IDamageable Target;
 
-        // 相手のコライダーの表面のうち、攻撃の中心にいちばん近い点
         public readonly Vector3 Point;
 
-        // 実際に減った HP（防御・無敵で 0 のこともある）
         public readonly int Damage;
 
         public AttackHit(IDamageable target, Vector3 point, int damage)
@@ -25,7 +22,6 @@ namespace DemoGame
         }
     }
 
-    // 火焔玉の段ごとの数値。設計：doc/demo-game/10-level-design.md §5.2・§5.3
     [Serializable]
     public struct FireballStage
     {
@@ -53,7 +49,6 @@ namespace DemoGame
         }
     }
 
-    // 攻撃。杖が消えていれば殴る。灯っていれば火焔玉（押してすぐ離すとチャージなし、押し続けると杖の光の段までチャージ）
     public class PlayerAttack : MonoBehaviour
     {
         [SerializeField]
@@ -131,15 +126,12 @@ namespace DemoGame
 
         public event Action Swung;
 
-        // 箱を押している間など、攻撃させたくないときに true にする
         public bool IsLocked { get; set; }
 
         public event Action<AttackHit> Hit;
 
-        // 撃った瞬間（段）。着弾ではない
         public event Action<int> FireballFired;
 
-        // チャージ中の段。-1 はチャージしていない（画面の縁の炎・杖の見た目が購読する）
         public ReadOnlyReactiveProperty<int> ChargeLevel => _chargeLevel;
 
         private readonly ReactiveProperty<int> _chargeLevel = new(-1);
@@ -151,7 +143,6 @@ namespace DemoGame
         private float _nextAttackTime;
         private readonly HashSet<IDamageable> _hitCache = new HashSet<IDamageable>();
 
-        // Gizmos 用。最後に攻撃した位置と、当たったか
         private float _lastSwingTime = float.NegativeInfinity;
         private Vector3 _lastSwingCenter;
         private bool _lastSwingHit;
@@ -215,7 +206,6 @@ namespace DemoGame
             if (IsLocked) return;
             if (Time.time < _nextAttackTime) return;
 
-            // 杖を拾うまでは攻撃できない
             if (_staff != null && !_staff.IsOwned.CurrentValue) return;
 
             if (_staff != null && _staff.IsLit && _fireballPrefab != null)
@@ -268,7 +258,6 @@ namespace DemoGame
         {
             if (!_isCharging) return;
 
-            // 箱を押し始めた・杖の火が消えたなどで撃てなくなったら、撃たずにやめる
             if (IsLocked || _staff == null || !_staff.IsLit)
             {
                 CancelCharge();
@@ -281,7 +270,6 @@ namespace DemoGame
             int level = 0;
             for (int i = 1; i <= maxLevel; i++)
             {
-                // 杖の火が足りない段には上がらない
                 if (held < _fireballStages[i].HoldTime) break;
                 if (_staff.Flame.CurrentValue < _fireballStages[i].FlameCost) break;
 
@@ -315,7 +303,6 @@ namespace DemoGame
             Vector3 direction = GetAimDirection();
             FaceTowards(direction);
 
-            // 体の向きを変えてから位置を取る（杖の先は体と一緒に回る）
             var muzzle = _staff.Muzzle;
             direction = GetAimDirectionFrom(muzzle.position, direction);
 
@@ -334,7 +321,6 @@ namespace DemoGame
 
         private void ReleaseFireball(Fireball fireball)
         {
-            // プレイヤーが先に消えていたら、弾も消す
             if (_fireballPool == null)
             {
                 Destroy(fireball.gameObject);
@@ -344,7 +330,6 @@ namespace DemoGame
             _fireballPool.Release(fireball);
         }
 
-        // 画面の中央（カメラの正面）。TPS でも FPS でも同じ
         private Vector3 GetAimDirection()
         {
             var cam = GetAimCamera();
@@ -354,7 +339,6 @@ namespace DemoGame
             return origin.forward;
         }
 
-        // カメラの正面の先にある物を狙いの点にして、杖の先からそこへ向ける
         private Vector3 GetAimDirectionFrom(Vector3 muzzlePosition, Vector3 fallback)
         {
             var cam = GetAimCamera();
@@ -376,7 +360,6 @@ namespace DemoGame
 
             Vector3 direction = target - muzzlePosition;
 
-            // 狙いの点が杖の先より手前（すぐ目の前の壁など）なら、カメラの向きのまま撃つ
             if (direction.sqrMagnitude < 0.25f || Vector3.Dot(direction, cam.forward) <= 0f)
             {
                 return cam.forward;
@@ -393,7 +376,6 @@ namespace DemoGame
             return main != null ? main.transform : null;
         }
 
-        // TPS では撃つ向きへ体を向ける（FPS はもともとカメラの向き）
         private void FaceTowards(Vector3 direction)
         {
             if (_controller == null || _controller.ViewMode != CameraMode.Tps) return;
@@ -417,10 +399,8 @@ namespace DemoGame
 
             foreach (var col in colliders)
             {
-                // 自分自身も IDamageable を持っているので、まず除外する
                 if (col.transform.root == transform.root) continue;
 
-                // 1つの相手が複数のコライダーを持っていても、ダメージは1回だけ
                 if (!col.TryGetComponent(out IDamageable target)) continue;
                 if (target.IsDead) continue;
                 if (!_hitCache.Add(target)) continue;
@@ -439,8 +419,6 @@ namespace DemoGame
             return origin.position + origin.forward * _forwardOffset + Vector3.up * _heightOffset;
         }
 
-        // 判定の位置を描く（DebugShapes。Scene ビューと Game ビューの両方に出る）
-        //   薄い橙：いま攻撃したら出る位置 ／ 攻撃した直後：当たったら赤、外れたら白
         private void Update()
         {
             UpdateCharge();
@@ -464,7 +442,6 @@ namespace DemoGame
         }
 
 #if UNITY_EDITOR
-        // 再生していないときに、選ぶと判定の位置を確かめられる
         private void OnDrawGizmosSelected()
         {
             if (Application.isPlaying || !_drawGizmo) return;

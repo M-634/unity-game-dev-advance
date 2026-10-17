@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // 表示だけを担当する。何を出すかは Presenter が決める。
     public class HudView : MonoBehaviour
     {
         [SerializeField]
@@ -55,7 +54,6 @@ namespace DemoGame
             _bossHpFill.localScale = scale;
         }
 
-        // null なら表示を消す
         public void SetInteractPrompt(string prompt)
         {
             if (_interactText == null) return;

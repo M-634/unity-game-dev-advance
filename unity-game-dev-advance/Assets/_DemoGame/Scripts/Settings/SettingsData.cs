@@ -16,7 +16,6 @@ namespace DemoGame
         Ultra,
     }
 
-    // 保存する形。JsonUtility で読み書きするので、public なフィールドだけで持つ。
     [Serializable]
     public sealed class SettingsData
     {
@@ -30,7 +29,6 @@ namespace DemoGame
     [Serializable]
     public sealed class GraphicsSettingsData
     {
-        // 0 × 0 は「画面の解像度に合わせる」
         public int ResolutionWidth;
         public int ResolutionHeight;
         public ScreenMode ScreenMode = ScreenMode.FullScreen;

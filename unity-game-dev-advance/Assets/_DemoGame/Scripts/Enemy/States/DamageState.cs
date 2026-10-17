@@ -2,7 +2,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // 被弾して怯む。怯みが終わったら、当ててきた相手を追う
     public sealed class DamageState : IState
     {
         private readonly EnemyController _owner;

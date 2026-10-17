@@ -5,9 +5,6 @@ using UnityEngine.Rendering.Universal;
 
 namespace DemoGame
 {
-    // チャージ中に画面の縁が燃える演出の設定。設計：doc/demo-game/11-lighting.md §5.3
-    // Volume_ChargeFlame に入れておき、LumenVisionController がその Volume の重みをチャージの段で動かす
-    // 値を持つだけで、描くのは FlameVignetteRendererFeature
     [Serializable, VolumeComponentMenu("DemoGame/Flame Vignette")]
     [SupportedOnRenderPipeline(typeof(UniversalRenderPipelineAsset))]
     public sealed class FlameVignetteVolume : VolumeComponent, IPostProcessComponent

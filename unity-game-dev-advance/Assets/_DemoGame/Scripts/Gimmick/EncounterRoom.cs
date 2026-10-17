@@ -4,9 +4,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // 入口を閉じて戦闘を始め、全滅したら入口を開ける
-    //   _beginOnEnter ON ：部屋の中のトリガーにプレイヤーが入ったら始まる
-    //   _beginOnEnter OFF：Begin() で始まる（灯火 2：灯火に火をつけたら。InteractLanternTrigger から）
     public class EncounterRoom : MonoBehaviour
     {
         [SerializeField]
@@ -24,7 +21,6 @@ namespace DemoGame
         private readonly Subject<Unit> _cleared = new();
         private bool _isStarted;
 
-        // 全滅して入口が開き始めたとき
         public Observable<Unit> Cleared => _cleared;
 
         public bool IsStarted => _isStarted;

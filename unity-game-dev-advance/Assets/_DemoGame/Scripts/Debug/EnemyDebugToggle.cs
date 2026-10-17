@@ -2,11 +2,8 @@ using DemoGame;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-// この名前空間の中では `Debug` が Demo.Debug 名前空間を指す。ログを出すときは UnityEngine.Debug と書くこと
 namespace Demo.Debug
 {
-    // F1 で全部の敵のデバッグモード（DebugState：棒立ち・一撃で倒れる）を切り替える
-    // シーンには置かない。再生を始めたときに自分で作られ、シーンをまたいで残る
     public class EnemyDebugToggle : MonoBehaviour
     {
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]

@@ -3,12 +3,6 @@ using UnityEngine;
 
 namespace DemoGame
 {
-    // 点灯条件：杖が灯っている状態で、灯の近くで E キー。杖を灯へ伸ばして（PlayerStaffReach）、届いたら点く
-    // 設計：doc/demo-game/10-level-design.md §4.3・§4.4
-    //   ふつう            ：その場で点く
-    //   _encounterRoom あり：火だけついて敵が出る（灯火 2）。全滅したら点く
-    //   _blockers         ：どれかが残っている間は点けられない（灯火 3 の蔦・まだ開いていない魔法の壁）
-    // 探されるのはコライダーなので、この GameObject か子にコライダー（トリガー可）を付けておく
     public class InteractLanternTrigger : MonoBehaviour, IInteractable
     {
         [SerializeField]
@@ -49,7 +43,6 @@ namespace DemoGame
                 if (blocker != null && blocker.activeInHierarchy) return false;
             }
 
-            // 杖の火で点ける。杖が消えていたら働きかけられない（HUD にも出ない）
             var staff = interactor.GetComponentInParent<Staff>();
             return staff != null && staff.IsLit;
         }
