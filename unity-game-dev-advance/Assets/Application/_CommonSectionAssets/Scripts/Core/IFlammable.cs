@@ -1,0 +1,9 @@
+namespace Section.Common
+{
+    public interface IFlammable
+    {
+        bool IsBurnt { get; }
+
+        void Ignite();
+    }
+}
