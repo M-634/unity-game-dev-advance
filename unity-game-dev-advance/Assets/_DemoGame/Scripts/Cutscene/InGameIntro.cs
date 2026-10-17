@@ -68,12 +68,22 @@ namespace DemoGame
 
             if (_altarShowcase != null)
             {
-                UniTask showcase = _altarShowcase.PlayAsync(token);
-                await UniTask.WhenAny(showcase, UniTask.Delay((int)(_igniteDelay * 1000f), cancellationToken: token));
-                _altar.Reignite();
-                await showcase;
-                return;
+                IgniteLaterAsync(token).SuppressCancellationThrow().Forget();
+                await _altarShowcase.PlayAsync(token);
             }
+
+            IgniteAltar();
+        }
+
+        private async UniTask IgniteLaterAsync(CancellationToken token)
+        {
+            await UniTask.Delay((int)(_igniteDelay * 1000f), cancellationToken: token);
+            IgniteAltar();
+        }
+
+        private void IgniteAltar()
+        {
+            if (_altar == null || _altar.IsBurning) return;
 
             _altar.Reignite();
         }
