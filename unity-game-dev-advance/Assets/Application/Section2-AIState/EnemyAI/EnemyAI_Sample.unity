@@ -479,6 +479,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 329322471}
+  - component: {fileID: 329322472}
   m_Layer: 0
   m_Name: Point2
   m_TagString: Untagged
@@ -501,6 +502,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1278546183}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &329322472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 329322470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ed4a29b8f6e55e43918f93ae9850a68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EmptyPointRenderer
+  _color: {r: 0, g: 1, b: 0, a: 1}
+  _radius: 0.6
 --- !u!1 &514497072
 GameObject:
   m_ObjectHideFlags: 0
@@ -2769,19 +2784,19 @@ PrefabInstance:
       objectReference: {fileID: 1638719124}
     - target: {fileID: 2883011056348797323, guid: c46a7c04f2c759a4694dc5fe6e447ef3, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.98255944
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2883011056348797323, guid: c46a7c04f2c759a4694dc5fe6e447ef3, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.18330292
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2883011056348797323, guid: c46a7c04f2c759a4694dc5fe6e447ef3, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.030727511
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2883011056348797323, guid: c46a7c04f2c759a4694dc5fe6e447ef3, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.0057324194
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6174320370888281990, guid: c46a7c04f2c759a4694dc5fe6e447ef3, type: 3}
       propertyPath: _layers.m_Bits
@@ -2789,19 +2804,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6708143376489767917, guid: c46a7c04f2c759a4694dc5fe6e447ef3, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.98572314
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6708143376489767917, guid: c46a7c04f2c759a4694dc5fe6e447ef3, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.16544771
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6708143376489767917, guid: c46a7c04f2c759a4694dc5fe6e447ef3, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.03082645
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6708143376489767917, guid: c46a7c04f2c759a4694dc5fe6e447ef3, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.0051740347
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7225054684179972549, guid: c46a7c04f2c759a4694dc5fe6e447ef3, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2910,6 +2925,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 835103422}
+  - component: {fileID: 835103423}
   m_Layer: 0
   m_Name: Point1
   m_TagString: Untagged
@@ -2932,6 +2948,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1278546183}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &835103423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 835103421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ed4a29b8f6e55e43918f93ae9850a68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EmptyPointRenderer
+  _color: {r: 0, g: 1, b: 0, a: 1}
+  _radius: 0.6
 --- !u!1 &974340583
 GameObject:
   m_ObjectHideFlags: 0
@@ -3399,7 +3429,7 @@ MonoBehaviour:
     m_Bits: 4294967295
   m_UseGeometry: 0
   m_DefaultArea: 0
-  m_GenerateLinks: 0
+  m_GenerateLinks: 1
   m_IgnoreNavMeshAgent: 1
   m_IgnoreNavMeshObstacle: 1
   m_OverrideTileSize: 0
@@ -3441,6 +3471,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1229491467}
+  - component: {fileID: 1229491468}
   m_Layer: 0
   m_Name: Point3
   m_TagString: Untagged
@@ -3463,6 +3494,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1278546183}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1229491468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1229491466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ed4a29b8f6e55e43918f93ae9850a68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EmptyPointRenderer
+  _color: {r: 0, g: 1, b: 0, a: 1}
+  _radius: 0.6
 --- !u!1001 &1238104659
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4169,6 +4214,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1687364513}
+  - component: {fileID: 1687364514}
   m_Layer: 0
   m_Name: Point4
   m_TagString: Untagged
@@ -4184,13 +4230,27 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1687364512}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -10, y: 0, z: 17}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1278546183}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1687364514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1687364512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ed4a29b8f6e55e43918f93ae9850a68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EmptyPointRenderer
+  _color: {r: 0, g: 1, b: 0, a: 1}
+  _radius: 0.6
 --- !u!1 &1849143490
 GameObject:
   m_ObjectHideFlags: 3
