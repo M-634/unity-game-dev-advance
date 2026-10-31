@@ -1,13 +1,16 @@
 using UnityEngine;
 
-public class EmptyPointRenderer : MonoBehaviour
+namespace Section2.AIState
 {
-    [SerializeField] private Color _color = Color.green;
-    [SerializeField] private float _radius = 0.2f;
-
-    private void OnDrawGizmos()
+    public class EmptyPointRenderer : MonoBehaviour
     {
-        Gizmos.color = _color;
-        Gizmos.DrawSphere(transform.position, _radius);
+        [SerializeField] private Color _color = Color.green;
+        [SerializeField] private float _radius = 0.2f;
+    
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = _color;
+            Gizmos.DrawSphere(transform.position, _radius);
+        }
     }
 }
