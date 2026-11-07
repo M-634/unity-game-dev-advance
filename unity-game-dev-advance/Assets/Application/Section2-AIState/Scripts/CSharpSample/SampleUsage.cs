@@ -1,7 +1,7 @@
 ﻿using Section.Common;
 using UnityEngine;
 
-namespace Application.Section2_AIState.CSharpSample
+namespace Section2_AIState.CSharpSample
 {
     public class SampleUsage : MonoBehaviour
     {
